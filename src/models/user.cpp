@@ -38,3 +38,7 @@ void user::setPassword(const QString &password) {
 void user::setTypeId(int type_id) {
     this->type_id = type_id;
 }
+
+void user::setUsername(const QString &username) {
+    this->username = username;
+}
