@@ -25,14 +25,6 @@ private slots:
 
 private:
     QGridLayout *layout;
-    QLabel *dbHostnameLabel;
-    QLineEdit *dbHostnameLineEdit;
-    QLabel *dbUserNameLabel;
-    QLineEdit *dbUserNameLineEdit;
-    QLabel *dbPasswordLabel;
-    QLineEdit *dbPasswordLineEdit;
-    QLabel *dbNameLabel;
-    QLineEdit *dbNameLineEdit;
     QLabel *userNameLabel;
     QLineEdit *userNameLineEdit;
     QLabel *passwordLabel;
