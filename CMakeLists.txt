@@ -6,9 +6,4 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
 
-include_directories(
-        ${PROJECT_SOURCE_DIR}/include
-        ${PROJECT_SOURCE_DIR}/include/dialogs
-        ${PROJECT_SOURCE_DIR}/include/models
-)
 add_subdirectory(src)

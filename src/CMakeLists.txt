@@ -19,4 +19,8 @@ target_link_libraries(student_admission_management
         Qt::Sql
         OpenSSL::Crypto
 )
-
+target_include_directories(student_admission_management PRIVATE
+        ${PROJECT_SOURCE_DIR}/include
+        ${PROJECT_SOURCE_DIR}/include/dialogs
+        ${PROJECT_SOURCE_DIR}/include/models
+)
