@@ -12,11 +12,16 @@
 #include <QLineEdit>
 #include <QPushButton>
 
+#include "controller.h"
+
 class loginDialog : public QDialog {
 Q_OBJECT
 public:
     explicit loginDialog(QWidget *parent = nullptr);
     ~loginDialog() override;
+
+private slots:
+    void loginButtonClicked();
 
 private:
     QGridLayout *layout;
@@ -26,8 +31,6 @@ private:
     QLineEdit *dbUserNameLineEdit;
     QLabel *dbPasswordLabel;
     QLineEdit *dbPasswordLineEdit;
-    QLabel *dbPortLabel;
-    QLineEdit *dbPortLineEdit;
     QLabel *dbNameLabel;
     QLineEdit *dbNameLineEdit;
     QLabel *userNameLabel;
@@ -35,6 +38,7 @@ private:
     QLabel *passwordLabel;
     QLineEdit *passwordLineEdit;
     QPushButton *loginButton;
+    controller *ref_c;
 };
 
 
