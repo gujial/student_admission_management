@@ -57,19 +57,19 @@ mainWindow::mainWindow(QWidget *parent) {
 
     connect(actionExit, &QAction::triggered, this, &mainWindow::close);
 
-    connect(actionAddStudent, &QAction::triggered, this, [=]() {
+    connect(actionAddStudent, &QAction::triggered, this, [this]() {
         const auto addStudentDlg = new addStudentDialog(this, c);
         addStudentDlg->show();
 
         displayStudents();
     });
 
-    connect(actionAbout, &QAction::triggered, this, [=]() {
+    connect(actionAbout, &QAction::triggered, this, [this]() {
         const auto aboutDlg = new aboutDialog(this);
         aboutDlg->show();
     });
 
-    connect(actionDeleteStudent, &QAction::triggered, this, [=]() {
+    connect(actionDeleteStudent, &QAction::triggered, this, [this]() {
         QList<QTableWidgetItem *> selectedItems = table->selectedItems();
         QSet<int> selectedRows;
 
@@ -92,13 +92,17 @@ mainWindow::mainWindow(QWidget *parent) {
         displayStudents();
     });
 
-    connect(actionManageUsers, &QAction::triggered, this, [=]() {
+    connect(actionManageUsers, &QAction::triggered, this, [this]() {
         try {
             utils::checkUserPermission(c->loggedInUser.getTypeId());
         } catch (const std::exception &e) {
             QMessageBox::warning(this, "Error", e.what());
             return;
         }
+
+        const auto userManageWd = new userManageWindow(this, c);
+        userManageWd->resize(400, 300);
+        userManageWd->show();
     });
 
     connect(table, &QTableWidget::cellChanged, this, &mainWindow::onCellChanged);

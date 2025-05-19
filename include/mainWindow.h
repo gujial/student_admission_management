@@ -19,6 +19,7 @@
 #include <QSet>
 
 #include "controller.h"
+#include "userManageWindow.h"
 
 class mainWindow : public QMainWindow {
     Q_OBJECT
@@ -43,6 +44,7 @@ private:
     controller *c = nullptr;
     QList<student> students;
     bool updatingTable = false;
+
     void displayStudents();
     void onCellChanged(int row, int column);
     void revertRow(int row);

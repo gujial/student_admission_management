@@ -99,7 +99,7 @@ void controller::modifyUser(const QString &email, user newUser) const {
 QList<user> controller::getUsers() const {
     QList<user> users;
     QSqlQuery query(db);
-    query.prepare("select username,password,email,type_id form user;");
+    query.prepare("select username,password,email,type_id from user;");
     query.exec();
 
     while (query.next()) {
