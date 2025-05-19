@@ -215,3 +215,19 @@ student controller::getStudent(const QString& studentNum) const {
     throw std::runtime_error("Student not found");
 }
 
+void controller::modifyUserPassword(const QString &email, const QString &password) const {
+    utils::checkUserPermission(this->loggedInUser.getTypeId());
+    utils::checkPasswordFormat(password.toStdString());
+    utils::checkEmailFormat(email.toStdString());
+
+    QSqlQuery query(db);
+    query.prepare("update user set password = ? where email = ?;");
+    query.bindValue(0, QString::fromStdString(utils::md5(password.toStdString())));
+    query.bindValue(1, email);
+    if (query.exec()) {
+        qDebug() << "Modify user password successfully";
+    } else {
+        throw std::invalid_argument(query.lastError().text().toStdString());
+    }
+}
+
