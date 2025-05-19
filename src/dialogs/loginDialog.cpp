@@ -23,7 +23,7 @@ loginDialog::loginDialog(QWidget *parent, controller *c) {
     layout->addWidget(loginButton, 2, 0, 1, 0);
     setLayout(layout);
 
-    connect(loginButton, &QPushButton::clicked, this, [=]() {
+    connect(loginButton, &QPushButton::clicked, this, [&]() {
         loginButtonClicked(c);
     });
 }
