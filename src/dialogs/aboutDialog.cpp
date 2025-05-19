@@ -10,7 +10,7 @@ aboutDialog::aboutDialog(QWidget *parent) {
 
     nameLabel = new QLabel("Student Admission Management");
     versionLabel = new QLabel("1.0.0");
-    authorLabel = new QLabel("软件工程2305班 古佳乐");
+    authorLabel = new QLabel("软件工程2305班 古佳乐 8008123201");
     iconLabel = new QLabel(this);
     iconLabel->setPixmap(QPixmap(":/assets/images/icon.png").scaled(64, 64, Qt::KeepAspectRatio));
     layout = new QGridLayout(this);
