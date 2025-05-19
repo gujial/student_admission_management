@@ -71,8 +71,11 @@ void controller::userRegister(const QString &username, const QString &password, 
     query.bindValue(1, QString::fromStdString(utils::md5(password.toStdString())));
     query.bindValue(2, email);
     query.bindValue(3, type_id);
-    query.exec();
-    qDebug() << "Register successfully";
+    if (query.exec()) {
+        qDebug() << "Register successfully";
+    } else {
+        throw std::invalid_argument(query.lastError().text().toStdString());
+    }
 }
 
 void controller::modifyUser(const QString &email, user newUser) const {
@@ -85,8 +88,11 @@ void controller::modifyUser(const QString &email, user newUser) const {
     query.bindValue(1, QString::fromStdString(utils::md5(newUser.getPassword().toStdString())));
     query.bindValue(2, newUser.getTypeId());
     query.bindValue(3, email);
-    query.exec();
-    qDebug() << "Modify successfully";
+    if (query.exec()) {
+        qDebug() << "Modify successfully";
+    } else {
+        throw std::invalid_argument(query.lastError().text().toStdString());
+    }
 }
 
 std::list<user> controller::getUsers() const {
@@ -127,8 +133,11 @@ void controller::deleteStudent(int studentNum) const {
     QSqlQuery query(db);
     query.prepare("delete from student where number = ?;");
     query.bindValue(0, studentNum);
-    query.exec();
-    qDebug() << "Delete student successfully";
+    if (query.exec()) {
+        qDebug() << "Delete student successfully";
+    } else {
+        throw std::invalid_argument(query.lastError().text().toStdString());
+    }
 }
 
 void controller::modifyStudent(int studentNum, student newStudent) const {
@@ -141,8 +150,11 @@ void controller::modifyStudent(int studentNum, student newStudent) const {
     query.bindValue(1, newStudent.getBirthday());
     query.bindValue(2, newStudent.getAddress());
     query.bindValue(3, studentNum);
-    query.exec();
-    qDebug() << "Modify student successfully";
+    if (query.exec()) {
+        qDebug() << "Modify student successfully";
+    } else {
+        throw std::invalid_argument(query.lastError().text().toStdString());
+    }
 }
 
 std::list<student> controller::getStudents() const {

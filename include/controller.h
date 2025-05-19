@@ -8,6 +8,8 @@
 #include <list>
 #include <QSqlDatabase>
 #include <QSqlQuery>
+#include <QSqlError>
+
 #include "student.h"
 #include "utils.h"
 #include "user.h"
