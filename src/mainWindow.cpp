@@ -55,9 +55,6 @@ mainWindow::mainWindow(QWidget *parent) {
     connect(actionAddStudent, &QAction::triggered, this, [=]() {
         const auto addStudentDlg = new addStudentDialog(this, c);
         addStudentDlg->show();
-        if (addStudentDlg->exec() != QDialog::Accepted) {
-            QMessageBox::warning(this, "Error", "Add student failed");
-        }
 
         displayStudents();
     });
