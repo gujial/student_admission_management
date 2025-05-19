@@ -11,7 +11,8 @@ find_package(Qt6 COMPONENTS
 
 find_package(OpenSSL REQUIRED)
 
-add_executable(student_admission_management ${SOURCES})
+add_executable(student_admission_management ${SOURCES}
+        ${PROJECT_SOURCE_DIR}/resources.qrc)
 target_link_libraries(student_admission_management
         Qt::Core
         Qt::Gui
