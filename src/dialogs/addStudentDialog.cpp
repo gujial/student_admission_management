@@ -6,6 +6,8 @@
 
 addStudentDialog::addStudentDialog(QWidget *parent, controller *c) {
     setWindowTitle("Add Student");
+    setWindowIcon(QIcon(":/assets/images/icon.png"));
+
     numberLabel = new QLabel("student number:");
     numberLineEdit = new QLineEdit();
     nameLabel = new QLabel("name:");

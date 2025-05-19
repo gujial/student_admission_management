@@ -6,6 +6,8 @@
 
 loginDialog::loginDialog(QWidget *parent, controller *c) {
     setWindowTitle("Login");
+    setWindowIcon(QIcon(":/assets/images/icon.png"));
+
     layout = new QGridLayout();
     userNameLabel = new QLabel("username:");
     userNameLineEdit = new QLineEdit();

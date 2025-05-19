@@ -10,6 +10,7 @@
 
 mainWindow::mainWindow(QWidget *parent) {
     setWindowTitle("Student Admission Management");
+    setWindowIcon(QIcon(":/assets/images/icon.png"));
 
     // 初始化成员变量
     menu = new QMenuBar(this);

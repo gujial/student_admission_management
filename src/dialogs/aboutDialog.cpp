@@ -6,6 +6,8 @@
 
 aboutDialog::aboutDialog(QWidget *parent) {
     setWindowTitle("about");
+    setWindowIcon(QIcon(":/assets/images/icon.png"));
+
     nameLabel = new QLabel("Student Admission Management");
     versionLabel = new QLabel("1.0.0");
     authorLabel = new QLabel("软件工程2305班 古佳乐");
