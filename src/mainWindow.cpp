@@ -3,6 +3,8 @@
 //
 
 #include "mainWindow.h"
+
+#include "addStudentDialog.h"
 #include "loginDialog.h"
 
 mainWindow::mainWindow(QWidget *parent) {
@@ -15,6 +17,7 @@ mainWindow::mainWindow(QWidget *parent) {
     menuHelp = new QMenu("Help");
     actionAbout = new QAction("About");
     actionExit = new QAction("Exit");
+    actionAddStudent = new QAction("Add Student");
     table = new QTableWidget(this);
     table->setColumnCount(4);
     table->setHorizontalHeaderLabels(QStringList() << "Student ID" << "Name" << "Birthday" << "Address");
@@ -34,6 +37,7 @@ mainWindow::mainWindow(QWidget *parent) {
 
     // 设置菜单
     menuHelp->addAction(actionAbout);
+    menuFile->addAction(actionAddStudent);
     menuFile->addAction(actionExit);
     menu->addMenu(menuFile);
     menu->addMenu(menuEdit);
@@ -42,7 +46,17 @@ mainWindow::mainWindow(QWidget *parent) {
 
     // 向布局中添加组件
     layout->addWidget(table);
+
     connect(actionExit, &QAction::triggered, this, &mainWindow::close);
+    connect(actionAddStudent, &QAction::triggered, this, [=]() {
+        const auto addStudentDlg = new addStudentDialog(this, c);
+        addStudentDlg->show();
+        if (addStudentDlg->exec() != QDialog::Accepted) {
+            QMessageBox::warning(this, "Error", "Add student failed");
+        }
+
+        displayStudents();
+    });
 
     const auto loginDlg = new loginDialog(this, c);
     loginDlg->show();

@@ -30,6 +30,7 @@ private:
     QMenu *menuHelp;
     QAction *actionAbout;
     QAction *actionExit;
+    QAction *actionAddStudent;
     QTableWidget *table;
     QGridLayout *layout;
     QWidget *central;
