@@ -79,15 +79,15 @@ void controller::userRegister(const QString &username, const QString &password, 
     }
 }
 
-void controller::modifyUser(const QString &email, user newUser) const {
+void controller::modifyUser(const QString &email, const QString& newEmail, const QString& username, const QString& typeId) const {
     utils::checkEmailFormat(email.toStdString());
-    utils::checkFormat(newUser.getUsername().toStdString(), newUser.getPassword().toStdString());
+    utils::checkUsernameFormat(username.toStdString());
 
     QSqlQuery query(db);
-    query.prepare("update user set username = ?, password = ?, type_id = ? where email = ?;");
-    query.bindValue(0, newUser.getUsername());
-    query.bindValue(1, QString::fromStdString(utils::md5(newUser.getPassword().toStdString())));
-    query.bindValue(2, newUser.getTypeId());
+    query.prepare("update user set username = ?, type_id = ?, email = ? where email = ?;");
+    query.bindValue(0, username);
+    query.bindValue(1, typeId);
+    query.bindValue(2, newEmail);
     query.bindValue(3, email);
     if (query.exec()) {
         qDebug() << "Modify successfully";

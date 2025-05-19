@@ -38,8 +38,9 @@ private:
     QWidget *central;
     QList<user> users;
     bool updatingTable = false;
+    controller *c;
 
-    void displayUsers(controller *c);
+    void displayUsers();
     void onCellChanged(int row, int column);
     void revertRow(int row);
 };

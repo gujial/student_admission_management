@@ -7,6 +7,7 @@
 userManageWindow::userManageWindow(QWidget *parent, controller *c) {
     setWindowTitle("Users");
     setWindowIcon(QIcon(":/assets/images/icon.png"));
+    this->c = c;
 
     menu = new QMenuBar(this);
     menuFile = new QMenu("File");
@@ -39,7 +40,7 @@ userManageWindow::userManageWindow(QWidget *parent, controller *c) {
         // const auto addUserDlg = new addUserDialog(this, c);
         // addUserDlg->show();
 
-        displayUsers(c);
+        displayUsers();
     });
 
     connect(actionDeleteUser, &QAction::triggered, this, [this, c]() {
@@ -62,19 +63,19 @@ userManageWindow::userManageWindow(QWidget *parent, controller *c) {
                 QMessageBox::warning(this, "Error", e.what());
             }
         }
-        displayUsers(c);
+        displayUsers();
     });
 
     connect(table, &QTableWidget::cellChanged, this, &userManageWindow::onCellChanged);
 
-    displayUsers(c);
+    displayUsers();
 }
 
 userManageWindow::~userManageWindow() {
 
 }
 
-void userManageWindow::displayUsers(controller *c) {
+void userManageWindow::displayUsers() {
     updatingTable = true;
     users = c->getUsers();
     table->clearContents();
@@ -90,7 +91,29 @@ void userManageWindow::displayUsers(controller *c) {
 }
 
 void userManageWindow::onCellChanged(int row, int column) {
+    if (updatingTable) return;
 
+    QString username = table->item(row, 0)->text();
+    QString email = table->item(row, 1)->text();
+    QString typeId = table->item(row, 2)->text();
+
+    try {
+        c->modifyUser(users[row].getEmail(), email, username, typeId);
+    } catch (const std::exception& e) {
+        revertRow(row);
+        QMessageBox::warning(this, "Error", e.what());
+    }
+}
+
+void userManageWindow::revertRow(int row) {
+    updatingTable = true;
+
+    user &u = users[row];
+    table->item(row, 0)->setText(u.getUsername());
+    table->item(row, 1)->setText(u.getEmail());
+    table->item(row, 2)->setText(QString::number(u.getTypeId()));
+
+    updatingTable = false;
 }
 
 #include "moc_userManageWindow.cpp"
