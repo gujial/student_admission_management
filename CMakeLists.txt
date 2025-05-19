@@ -7,3 +7,4 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
 
 add_subdirectory(src)
+add_subdirectory(test)
