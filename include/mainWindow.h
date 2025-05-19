@@ -35,6 +35,8 @@ private:
     QAction *actionExit;
     QAction *actionAddStudent;
     QAction *actionDeleteStudent;
+    QAction *actionSettings;
+    QAction *actionManageUsers;
     QTableWidget *table;
     QGridLayout *layout;
     QWidget *central;

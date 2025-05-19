@@ -16,6 +16,8 @@
 
 class controller {
 public:
+    user loggedInUser;
+
     controller(const QString& db_hostname, const QString& db_name, const QString& db_user, const QString& db_password);
     ~controller();
     void userLogin(const QString& username, const QString& password);
@@ -33,7 +35,6 @@ public:
 private:
     QSqlDatabase db;
     std::map<int, QString> userTypes;
-    user loggedInUser;
 };
 
 

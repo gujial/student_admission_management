@@ -21,6 +21,8 @@ mainWindow::mainWindow(QWidget *parent) {
     actionExit = new QAction("Exit");
     actionAddStudent = new QAction("Add Student");
     actionDeleteStudent = new QAction("Delete Student");
+    actionSettings = new QAction("Settings");
+    actionManageUsers = new QAction("Manage users");
     table = new QTableWidget(this);
     table->setColumnCount(4);
     table->setHorizontalHeaderLabels(QStringList() << "Student ID" << "Name" << "Birthday" << "Address");
@@ -42,6 +44,8 @@ mainWindow::mainWindow(QWidget *parent) {
     menuHelp->addAction(actionAbout);
     menuEdit->addAction(actionAddStudent);
     menuEdit->addAction(actionDeleteStudent);
+    menuFile->addAction(actionSettings);
+    menuFile->addAction(actionManageUsers);
     menuFile->addAction(actionExit);
     menu->addMenu(menuFile);
     menu->addMenu(menuEdit);
@@ -52,16 +56,19 @@ mainWindow::mainWindow(QWidget *parent) {
     layout->addWidget(table);
 
     connect(actionExit, &QAction::triggered, this, &mainWindow::close);
+
     connect(actionAddStudent, &QAction::triggered, this, [=]() {
         const auto addStudentDlg = new addStudentDialog(this, c);
         addStudentDlg->show();
 
         displayStudents();
     });
+
     connect(actionAbout, &QAction::triggered, this, [=]() {
         const auto aboutDlg = new aboutDialog(this);
         aboutDlg->show();
     });
+
     connect(actionDeleteStudent, &QAction::triggered, this, [=]() {
         QList<QTableWidgetItem *> selectedItems = table->selectedItems();
         QSet<int> selectedRows;
@@ -84,6 +91,16 @@ mainWindow::mainWindow(QWidget *parent) {
         }
         displayStudents();
     });
+
+    connect(actionManageUsers, &QAction::triggered, this, [=]() {
+        try {
+            utils::checkUserPermission(c->loggedInUser.getTypeId());
+        } catch (const std::exception &e) {
+            QMessageBox::warning(this, "Error", e.what());
+            return;
+        }
+    });
+
     connect(table, &QTableWidget::cellChanged, this, &mainWindow::onCellChanged);
 
     const auto loginDlg = new loginDialog(this, c);
@@ -92,6 +109,7 @@ mainWindow::mainWindow(QWidget *parent) {
        throw std::runtime_error("Error during login");
     }
 
+    setWindowTitle("Student Admission Management - Welcome "+c->loggedInUser.getUsername());
     displayStudents();
 }
 
