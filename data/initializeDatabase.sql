@@ -16,7 +16,7 @@ create table user(
 );
 
 create table student(
-    number int not null primary key,
+    number varchar(255) not null primary key,
     name varchar(255) not null,
     birthday date not null,
     address varchar(255)

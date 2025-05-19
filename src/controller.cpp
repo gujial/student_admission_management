@@ -144,16 +144,17 @@ void controller::deleteStudent(int studentNum) const {
     }
 }
 
-void controller::modifyStudent(int studentNum, student newStudent) const {
+void controller::modifyStudent(const QString& studentNum, student newStudent) const {
     utils::checkUserPermission(this->loggedInUser.getTypeId());
     utils::checkStudentNameFormat(newStudent.getName().toStdString());
 
     QSqlQuery query(db);
-    query.prepare("update student set name = ?, birthday = ?, address = ? where number = ?;");
+    query.prepare("update student set name = ?, birthday = ?, address = ?, number = ? where number = ?;");
     query.bindValue(0, newStudent.getName());
     query.bindValue(1, newStudent.getBirthday());
     query.bindValue(2, newStudent.getAddress());
-    query.bindValue(3, studentNum);
+    query.bindValue(3, newStudent.getNumber());
+    query.bindValue(4, studentNum);
     if (query.exec()) {
         qDebug() << "Modify student successfully";
     } else {

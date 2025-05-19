@@ -57,6 +57,7 @@ mainWindow::mainWindow(QWidget *parent) {
 
         displayStudents();
     });
+    connect(table, &QTableWidget::cellChanged, this, &mainWindow::onCellChanged);
 
     const auto loginDlg = new loginDialog(this, c);
     loginDlg->show();
@@ -71,8 +72,9 @@ mainWindow::~mainWindow() {
     delete c;
 }
 
-void mainWindow::displayStudents() const {
-    QList<student> students = c->getStudents();
+void mainWindow::displayStudents() {
+    updatingTable = true;
+    students = c->getStudents();
     table->clearContents();
     table->setRowCount(students.size());
 
@@ -83,6 +85,35 @@ void mainWindow::displayStudents() const {
         table->setItem(i, 2, new QTableWidgetItem(s.getBirthday().toString("yyyy-MM-dd")));
         table->setItem(i, 3, new QTableWidgetItem(s.getAddress()));
     }
+    updatingTable = false;
+}
+
+void mainWindow::onCellChanged(int row, int column) {
+    if (updatingTable) return;
+
+    QString studentId = table->item(row, 0)->text();
+    QString name = table->item(row, 1)->text();
+    QString birthdayStr = table->item(row, 2)->text();
+    QString address = table->item(row, 3)->text();
+
+    QDate birthday = QDate::fromString(birthdayStr, "yyyy-MM-dd");
+    if (!birthday.isValid()) {
+        QMessageBox::warning(this, "Invalid date", "Birthday format must be yyyy-MM-dd");
+        return;
+    }
+
+    const student s(
+        name,
+        QDate::fromString(birthdayStr, "yyyy-MM-dd"),
+        studentId,
+        address
+        );
+    try {
+        c->modifyStudent(students[row].getNumber(), s);
+    } catch (const std::exception& e) {
+        QMessageBox::warning(this, "Error", e.what());
+    }
+    displayStudents();
 }
 
 #include "moc_mainWindow.cpp"

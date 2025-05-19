@@ -28,7 +28,7 @@ public:
     void addStudent(student newStudent) const;
     void deleteStudent(int studentNum) const;
     QList<student> getStudents() const;
-    void modifyStudent(int studentNum, student newStudent) const;
+    void modifyStudent(const QString& studentNum, student newStudent) const;
     student getStudent(int studentNum) const;
 private:
     QSqlDatabase db;

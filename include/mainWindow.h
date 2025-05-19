@@ -35,8 +35,10 @@ private:
     QGridLayout *layout;
     QWidget *central;
     controller *c = nullptr;
-
-    void displayStudents() const;
+    QList<student> students;
+    bool updatingTable = false;
+    void displayStudents();
+    void onCellChanged(int row, int column);
 };
 
 
