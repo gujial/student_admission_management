@@ -20,14 +20,14 @@ public:
     ~controller();
     void userLogin(const QString& username, const QString& password);
     void userRegister(const QString& username, const QString& password, const QString& email, int type_id) const;
-    std::list<user> getUsers() const;
+    QList<user> getUsers() const;
     void modifyUser(const QString& email, user newUser) const;
     QString getUserTypeName(int type_id);
     user getUser(const QString& email) const;
 
     void addStudent(student newStudent) const;
     void deleteStudent(int studentNum) const;
-    std::list<student> getStudents() const;
+    QList<student> getStudents() const;
     void modifyStudent(int studentNum, student newStudent) const;
     student getStudent(int studentNum) const;
 private:

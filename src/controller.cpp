@@ -96,8 +96,8 @@ void controller::modifyUser(const QString &email, user newUser) const {
     }
 }
 
-std::list<user> controller::getUsers() const {
-    std::list<user> users;
+QList<user> controller::getUsers() const {
+    QList<user> users;
     QSqlQuery query(db);
     query.prepare("select username,password,email,type_id form user;");
     query.exec();
@@ -161,8 +161,8 @@ void controller::modifyStudent(int studentNum, student newStudent) const {
     }
 }
 
-std::list<student> controller::getStudents() const {
-    std::list<student> students;
+QList<student> controller::getStudents() const {
+    QList<student> students;
 
     QSqlQuery query(db);
     query.prepare("select number, name, birthday, address from student;");
@@ -171,7 +171,7 @@ std::list<student> controller::getStudents() const {
     while (query.next()) {
         students.emplace_back(
             query.value(1).toString(),
-            QDate::fromString(query.value(2).toString()),
+            QDate::fromString(query.value(2).toString(),"yyyy-MM-dd"),
             query.value(0).toString(),
             query.value(3).toString()
             );

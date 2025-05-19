@@ -16,6 +16,9 @@ mainWindow::mainWindow(QWidget *parent) {
     actionAbout = new QAction("About");
     actionExit = new QAction("Exit");
     table = new QTableWidget(this);
+    table->setColumnCount(4);
+    table->setHorizontalHeaderLabels(QStringList() << "Student ID" << "Name" << "Birthday" << "Address");
+    table->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
     c = new controller(
         "localhost",
         "login",
@@ -46,10 +49,26 @@ mainWindow::mainWindow(QWidget *parent) {
     if (loginDlg->exec() != QDialog::Accepted) {
        throw std::runtime_error("Error during login");
     }
+
+    displayStudents();
 }
 
 mainWindow::~mainWindow() {
     delete c;
+}
+
+void mainWindow::displayStudents() const {
+    QList<student> students = c->getStudents();
+    table->clearContents();
+    table->setRowCount(students.size());
+
+    for (int i = 0; i < students.size(); ++i) {
+        student& s = students[i];
+        table->setItem(i, 0, new QTableWidgetItem(s.getNumber()));
+        table->setItem(i, 1, new QTableWidgetItem(s.getName()));
+        table->setItem(i, 2, new QTableWidgetItem(s.getBirthday().toString("yyyy-MM-dd")));
+        table->setItem(i, 3, new QTableWidgetItem(s.getAddress()));
+    }
 }
 
 #include "moc_mainWindow.cpp"

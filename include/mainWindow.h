@@ -13,6 +13,7 @@
 #include <QAction>
 #include <QTableWidget>
 #include <QGridLayout>
+#include <QHeaderView>
 
 #include "controller.h"
 
@@ -33,6 +34,8 @@ private:
     QGridLayout *layout;
     QWidget *central;
     controller *c = nullptr;
+
+    void displayStudents() const;
 };
 
 
