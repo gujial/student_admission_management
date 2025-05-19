@@ -5,10 +5,34 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include <QApplication>
+#include <QMainWindow>
+#include <QMenu>
+#include <QMenuBar>
+#include <QGridLayout>
+#include <QAction>
+#include <QTableWidget>
+#include <QGridLayout>
 
+#include "controller.h"
 
-class mainWindow {
+class mainWindow : public QMainWindow {
+    Q_OBJECT
+public:
+    explicit mainWindow(QWidget *parent = 0);
+    ~mainWindow();
 
+private:
+    QMenuBar *menu;
+    QMenu *menuFile;
+    QMenu *menuEdit;
+    QMenu *menuHelp;
+    QAction *actionAbout;
+    QAction *actionExit;
+    QTableWidget *table;
+    QGridLayout *layout;
+    QWidget *central;
+    controller *c = nullptr;
 };
 
 
