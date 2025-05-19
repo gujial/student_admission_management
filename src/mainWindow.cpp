@@ -20,6 +20,7 @@ mainWindow::mainWindow(QWidget *parent) {
     actionAbout = new QAction("About");
     actionExit = new QAction("Exit");
     actionAddStudent = new QAction("Add Student");
+    actionDeleteStudent = new QAction("Delete Student");
     table = new QTableWidget(this);
     table->setColumnCount(4);
     table->setHorizontalHeaderLabels(QStringList() << "Student ID" << "Name" << "Birthday" << "Address");
@@ -40,6 +41,7 @@ mainWindow::mainWindow(QWidget *parent) {
     // 设置菜单
     menuHelp->addAction(actionAbout);
     menuEdit->addAction(actionAddStudent);
+    menuEdit->addAction(actionDeleteStudent);
     menuFile->addAction(actionExit);
     menu->addMenu(menuFile);
     menu->addMenu(menuEdit);
@@ -62,6 +64,28 @@ mainWindow::mainWindow(QWidget *parent) {
     connect(actionAbout, &QAction::triggered, this, [=]() {
         const auto aboutDlg = new aboutDialog(this);
         aboutDlg->show();
+    });
+    connect(actionDeleteStudent, &QAction::triggered, this, [=]() {
+        QList<QTableWidgetItem *> selectedItems = table->selectedItems();
+        QSet<int> selectedRows;
+
+        if (selectedItems.isEmpty()) {
+            QMessageBox::warning(this, "Error", "No Student selected");
+            return;
+        }
+
+        for (QTableWidgetItem *item : selectedItems) {
+            selectedRows.insert(item->row());
+        }
+
+        for (int row : selectedRows) {
+            try {
+                c->deleteStudent(students[row].getNumber());
+            } catch (const std::exception &e) {
+                QMessageBox::warning(this, "Error", e.what());
+            }
+        }
+        displayStudents();
     });
     connect(table, &QTableWidget::cellChanged, this, &mainWindow::onCellChanged);
 

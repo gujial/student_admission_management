@@ -14,6 +14,9 @@
 #include <QTableWidget>
 #include <QGridLayout>
 #include <QHeaderView>
+#include <QList>
+#include <QListWidgetItem>
+#include <QSet>
 
 #include "controller.h"
 
@@ -31,6 +34,7 @@ private:
     QAction *actionAbout;
     QAction *actionExit;
     QAction *actionAddStudent;
+    QAction *actionDeleteStudent;
     QTableWidget *table;
     QGridLayout *layout;
     QWidget *central;

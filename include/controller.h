@@ -26,10 +26,10 @@ public:
     user getUser(const QString& email) const;
 
     void addStudent(student newStudent) const;
-    void deleteStudent(int studentNum) const;
+    void deleteStudent(const QString& studentNum) const;
     QList<student> getStudents() const;
     void modifyStudent(const QString& studentNum, student newStudent) const;
-    student getStudent(int studentNum) const;
+    student getStudent(const QString& studentNum) const;
 private:
     QSqlDatabase db;
     std::map<int, QString> userTypes;

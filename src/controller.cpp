@@ -131,7 +131,7 @@ void controller::addStudent(student newStudent) const {
     }
 }
 
-void controller::deleteStudent(int studentNum) const {
+void controller::deleteStudent(const QString& studentNum) const {
     utils::checkUserPermission(this->loggedInUser.getTypeId());
 
     QSqlQuery query(db);
@@ -198,7 +198,7 @@ user controller::getUser(const QString& email) const {
     throw std::runtime_error("User not found");
 }
 
-student controller::getStudent(int studentNum) const {
+student controller::getStudent(const QString& studentNum) const {
     QSqlQuery query(db);
     query.prepare("select number, name, birthday, address from student where number = ?;");
     query.bindValue(0, studentNum);
