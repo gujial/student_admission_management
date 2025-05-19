@@ -51,6 +51,7 @@ void controller::userLogin(const QString &username, const QString &password) {
         query.prepare("select username,password,email,type_id from user where username = ?");
         query.bindValue(0, username);
         query.exec();
+        query.next();
         this->loggedInUser = user(
             query.value(0).toString(),
             query.value(1).toString(),

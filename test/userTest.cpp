@@ -14,5 +14,6 @@ int main(int argc, char *argv[]) {
         "041109"
     );
 
-    c->userRegister("administrator", "administrator", "123@123.123", 0);
+    // c->userRegister("administrator", "administrator", "123@123.123", 0);
+    c->userLogin("administrator", "administrator");
 }

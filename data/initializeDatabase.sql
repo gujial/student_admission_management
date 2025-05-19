@@ -3,7 +3,7 @@ drop table if exists user_type;
 drop table if exists student;
 
 create table user_type(
-    type_id int not null primary key auto_increment,
+    type_id int not null primary key,
     type_name varchar(255) not null
 );
 
@@ -21,3 +21,5 @@ create table student(
     birthday date not null,
     address varchar(255)
 );
+
+insert into user_type(type_id, type_name) VALUES (0, 'administrator'),(1,'user');

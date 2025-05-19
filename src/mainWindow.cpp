@@ -16,6 +16,12 @@ mainWindow::mainWindow(QWidget *parent) {
     actionAbout = new QAction("About");
     actionExit = new QAction("Exit");
     table = new QTableWidget(this);
+    c = new controller(
+        "localhost",
+        "login",
+        "root",
+        "041109"
+        );
 
     // 设置布局
     central = new QWidget(this);
@@ -35,17 +41,15 @@ mainWindow::mainWindow(QWidget *parent) {
     layout->addWidget(table);
     connect(actionExit, &QAction::triggered, this, &mainWindow::close);
 
-    if (c == nullptr) {
-        const auto loginDlg = new loginDialog(this, c);
-        loginDlg->show();
-        if (loginDlg->exec() != QDialog::Accepted || c == nullptr) {
-            throw std::runtime_error("Error during login");
-        }
+    const auto loginDlg = new loginDialog(this, c);
+    loginDlg->show();
+    if (loginDlg->exec() != QDialog::Accepted) {
+       throw std::runtime_error("Error during login");
     }
 }
 
 mainWindow::~mainWindow() {
-
+    delete c;
 }
 
 #include "moc_mainWindow.cpp"

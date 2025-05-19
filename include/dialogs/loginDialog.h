@@ -22,7 +22,7 @@ public:
     ~loginDialog() override;
 
 private slots:
-    void loginButtonClicked();
+    void loginButtonClicked(controller *c);
 
 private:
     QGridLayout *layout;
@@ -31,7 +31,6 @@ private:
     QLabel *passwordLabel;
     QLineEdit *passwordLineEdit;
     QPushButton *loginButton;
-    controller *ref_c;
 };
 
 
