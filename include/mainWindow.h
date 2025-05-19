@@ -21,7 +21,7 @@ class mainWindow : public QMainWindow {
     Q_OBJECT
 public:
     explicit mainWindow(QWidget *parent = 0);
-    ~mainWindow();
+    ~mainWindow() override;
 
 private:
     QMenuBar *menu;

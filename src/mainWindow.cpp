@@ -39,7 +39,7 @@ mainWindow::mainWindow(QWidget *parent) {
 
     // 设置菜单
     menuHelp->addAction(actionAbout);
-    menuFile->addAction(actionAddStudent);
+    menuEdit->addAction(actionAddStudent);
     menuFile->addAction(actionExit);
     menu->addMenu(menuFile);
     menu->addMenu(menuEdit);

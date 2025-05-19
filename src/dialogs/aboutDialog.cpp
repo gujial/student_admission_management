@@ -5,7 +5,7 @@
 #include "aboutDialog.h"
 
 aboutDialog::aboutDialog(QWidget *parent) {
-    setWindowTitle("about");
+    setWindowTitle("About");
     setWindowIcon(QIcon(":/assets/images/icon.png"));
 
     nameLabel = new QLabel("Student Admission Management");
