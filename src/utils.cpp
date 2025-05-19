@@ -8,7 +8,7 @@ void utils::checkUsernameFormat(const std::string &name) {
     char firstLetter = name.at(0);
     int firstLetterInt = firstLetter;
     if (name.length() < 6) {
-        throw std::invalid_argument("Username must be less than 6 characters");
+        throw std::invalid_argument("Username must be more than 6 characters");
     }
     if (firstLetterInt < 65 || firstLetterInt > 122) {
         throw std::invalid_argument("First charactor of username must be letters");
@@ -68,12 +68,12 @@ std::string utils::md5(const std::string& src) {
 }
 
 void utils::checkUserPermission(int type_id) {
-    if (type_id == 1) {
+    if (type_id == 0) {
         return;
     }
     throw std::runtime_error("Permission denied");
 }
 
 void utils::checkStudentNameFormat(const std::string &name) {
-    checkUsernameFormat(name);
+    return;
 }

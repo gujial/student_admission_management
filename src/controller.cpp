@@ -119,13 +119,16 @@ void controller::addStudent(student newStudent) const {
     utils::checkStudentNameFormat(newStudent.getName().toStdString());
 
     QSqlQuery query(db);
-    query.prepare("insert into student(number, name, birthday, address) values ?, ?, ?, ?;");
+    query.prepare("insert into student(number, name, birthday, address) values (?, ?, ?, ?);");
     query.bindValue(0, newStudent.getNumber());
     query.bindValue(1, newStudent.getName());
     query.bindValue(2, newStudent.getBirthday());
     query.bindValue(3, newStudent.getAddress());
-    query.exec();
-    qDebug() << "Add student successfully";
+    if (query.exec()) {
+        qDebug() << "Add student successfully";
+    } else {
+        throw std::invalid_argument(query.lastError().text().toStdString());
+    }
 }
 
 void controller::deleteStudent(int studentNum) const {

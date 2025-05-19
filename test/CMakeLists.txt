@@ -1,5 +1,4 @@
 file(GLOB_RECURSE SOURCES
-        *.cpp
         ${PROJECT_SOURCE_DIR}/src/*.cpp
 )
 
@@ -15,15 +14,31 @@ find_package(Qt6 COMPONENTS
 
 find_package(OpenSSL REQUIRED)
 
-add_executable(test ${SOURCES})
-target_link_libraries(test
+add_executable(userTest ${SOURCES}
+        userTest.cpp)
+target_link_libraries(userTest
         Qt::Core
         Qt::Gui
         Qt::Widgets
         Qt::Sql
         OpenSSL::Crypto
 )
-target_include_directories(test PRIVATE
+target_include_directories(userTest PRIVATE
+        ${PROJECT_SOURCE_DIR}/include
+        ${PROJECT_SOURCE_DIR}/include/dialogs
+        ${PROJECT_SOURCE_DIR}/include/models
+)
+
+add_executable(studentTest ${SOURCES}
+        studentTest.cpp)
+target_link_libraries(studentTest
+        Qt::Core
+        Qt::Gui
+        Qt::Widgets
+        Qt::Sql
+        OpenSSL::Crypto
+)
+target_include_directories(studentTest PRIVATE
         ${PROJECT_SOURCE_DIR}/include
         ${PROJECT_SOURCE_DIR}/include/dialogs
         ${PROJECT_SOURCE_DIR}/include/models
