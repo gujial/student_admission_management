@@ -39,6 +39,7 @@ private:
     bool updatingTable = false;
     void displayStudents();
     void onCellChanged(int row, int column);
+    void revertRow(int row);
 };
 
 

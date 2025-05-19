@@ -4,6 +4,7 @@
 
 #include "mainWindow.h"
 
+#include "aboutDialog.h"
 #include "addStudentDialog.h"
 #include "loginDialog.h"
 
@@ -57,6 +58,10 @@ mainWindow::mainWindow(QWidget *parent) {
 
         displayStudents();
     });
+    connect(actionAbout, &QAction::triggered, this, [=]() {
+        const auto aboutDlg = new aboutDialog(this);
+        aboutDlg->show();
+    });
     connect(table, &QTableWidget::cellChanged, this, &mainWindow::onCellChanged);
 
     const auto loginDlg = new loginDialog(this, c);
@@ -99,6 +104,7 @@ void mainWindow::onCellChanged(int row, int column) {
     QDate birthday = QDate::fromString(birthdayStr, "yyyy-MM-dd");
     if (!birthday.isValid()) {
         QMessageBox::warning(this, "Invalid date", "Birthday format must be yyyy-MM-dd");
+        revertRow(row);
         return;
     }
 
@@ -111,9 +117,21 @@ void mainWindow::onCellChanged(int row, int column) {
     try {
         c->modifyStudent(students[row].getNumber(), s);
     } catch (const std::exception& e) {
+        revertRow(row);
         QMessageBox::warning(this, "Error", e.what());
     }
-    displayStudents();
+}
+
+void mainWindow::revertRow(int row) {
+    updatingTable = true;
+
+    student &s = students[row];
+    table->item(row, 0)->setText(s.getNumber());
+    table->item(row, 1)->setText(s.getName());
+    table->item(row, 2)->setText(s.getBirthday().toString("yyyy-MM-dd"));
+    table->item(row, 3)->setText(s.getAddress());
+
+    updatingTable = false;
 }
 
 #include "moc_mainWindow.cpp"
