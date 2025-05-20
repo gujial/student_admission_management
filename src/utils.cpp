@@ -75,5 +75,18 @@ void utils::checkUserPermission(int type_id) {
 }
 
 void utils::checkStudentNameFormat(const std::string &name) {
-    return;
+    char firstLetter = name.at(0);
+    int firstLetterInt = firstLetter;
+    if (firstLetterInt < 65 || firstLetterInt > 122) {
+        throw std::invalid_argument("First charactor of name must be letters");
+    }
+}
+
+void utils::checkStudentNumberFormat(const std::string &number) {
+    if (number.length() > 20) {
+        throw std::invalid_argument("student number is too long");
+    }
+    if (number.length() < 6) {
+        throw std::invalid_argument("student number is too short");
+    }
 }

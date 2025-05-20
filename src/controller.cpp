@@ -117,6 +117,7 @@ QList<user> controller::getUsers() const {
 void controller::addStudent(student newStudent) const {
     utils::checkUserPermission(this->loggedInUser.getTypeId());
     utils::checkStudentNameFormat(newStudent.getName().toStdString());
+    utils::checkStudentNumberFormat(newStudent.getNumber().toStdString());
 
     QSqlQuery query(db);
     query.prepare("insert into student(number, name, birthday, address) values (?, ?, ?, ?);");
@@ -147,6 +148,7 @@ void controller::deleteStudent(const QString& studentNum) const {
 void controller::modifyStudent(const QString& studentNum, student newStudent) const {
     utils::checkUserPermission(this->loggedInUser.getTypeId());
     utils::checkStudentNameFormat(newStudent.getName().toStdString());
+    utils::checkStudentNumberFormat(newStudent.getNumber().toStdString());
 
     QSqlQuery query(db);
     query.prepare("update student set name = ?, birthday = ?, address = ?, number = ? where number = ?;");

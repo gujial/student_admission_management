@@ -22,6 +22,7 @@ public:
     static void checkUserPermission(int type_id);
 
     static void checkStudentNameFormat(const std::string& name);
+    static void checkStudentNumberFormat(const std::string& number);
 };
 
 
