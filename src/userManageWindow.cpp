@@ -15,6 +15,7 @@ userManageWindow::userManageWindow(QWidget *parent, controller *c) {
     actionExit = new QAction("Exit");
     actionAddUser = new QAction("Add user");
     actionDeleteUser = new QAction("Delete user");
+    actionModifyPassword = new QAction("Modify password");
     table = new QTableWidget(this);
     table->setColumnCount(3);
     table->setHorizontalHeaderLabels(QStringList() << "Username" << "Email" << "Type ID");
@@ -27,6 +28,7 @@ userManageWindow::userManageWindow(QWidget *parent, controller *c) {
 
     menuEdit->addAction(actionAddUser);
     menuEdit->addAction(actionDeleteUser);
+    menuEdit->addAction(actionModifyPassword);
     menuFile->addAction(actionExit);
     menu->addMenu(menuFile);
     menu->addMenu(menuEdit);
@@ -56,13 +58,38 @@ userManageWindow::userManageWindow(QWidget *parent, controller *c) {
             selectedRows.insert(item->row());
         }
 
-        for (int row : selectedRows) {
+        for (const int row : selectedRows) {
             try {
                 c->deleteUser(users[row].getEmail());
             } catch (const std::exception &e) {
                 QMessageBox::warning(this, "Error", e.what());
             }
         }
+        displayUsers();
+    });
+
+    connect(actionModifyPassword, &QAction::triggered, this, [this, c]() {
+        QList<QTableWidgetItem *> selectedItems = table->selectedItems();
+
+        if (selectedItems.isEmpty()) {
+            QMessageBox::warning(this, "Error", "No user selected");
+            return;
+        }
+
+        if (selectedItems.size() > 1) {
+            QMessageBox::warning(this, "Error", "Too many users selected");
+            return;
+        }
+
+        try {
+            const auto modifyPasswordDlg = new modifyPasswordDialog(this, c, users[selectedItems[0]->row()].getEmail());
+            modifyPasswordDlg->show();
+            modifyPasswordDlg->exec();
+            displayUsers();
+        } catch (const std::exception &e) {
+            QMessageBox::warning(this, "Error", e.what());
+        }
+
         displayUsers();
     });
 

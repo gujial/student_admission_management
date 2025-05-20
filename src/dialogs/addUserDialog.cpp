@@ -5,7 +5,7 @@
 #include "addUserDialog.h"
 
 addUserDialog::addUserDialog(QWidget *parent, controller *c) {
-    setWindowTitle("Add Student");
+    setWindowTitle("Add User");
     setWindowIcon(QIcon(":/assets/images/icon.png"));
 
     usernameLabel = new QLabel("Username:");

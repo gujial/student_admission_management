@@ -17,6 +17,7 @@
 #include <QMessageBox>
 
 #include "addUserDialog.h"
+#include "modifyPasswordDialog.h"
 #include "user.h"
 #include "controller.h"
 
@@ -33,6 +34,7 @@ private:
     QAction *actionExit;
     QAction *actionAddUser;
     QAction *actionDeleteUser;
+    QAction *actionModifyPassword;
     QTableWidget *table;
     QGridLayout *layout;
     QWidget *central;
