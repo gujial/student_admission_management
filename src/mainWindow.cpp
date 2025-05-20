@@ -60,7 +60,7 @@ mainWindow::mainWindow(QWidget *parent) {
     connect(actionAddStudent, &QAction::triggered, this, [this]() {
         const auto addStudentDlg = new addStudentDialog(this, c);
         addStudentDlg->show();
-
+        addStudentDlg->exec();
         displayStudents();
     });
 
