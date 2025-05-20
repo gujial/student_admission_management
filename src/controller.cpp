@@ -9,7 +9,7 @@ controller::controller(const QString& db_hostname, const QString& db_name, const
     "anonymous",
     "",
     "",
-    0
+    1
 )) {
     db = QSqlDatabase::addDatabase("QMYSQL");
     db.setHostName(db_hostname);
