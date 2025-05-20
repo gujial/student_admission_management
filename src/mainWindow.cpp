@@ -24,6 +24,11 @@ mainWindow::mainWindow(QWidget *parent, controller *c) {
     actionSettings = new QAction("Settings");
     actionLogout = new QAction("Logout");
     actionManageUsers = new QAction("Manage users");
+    actionFindStudent = new QAction("Find Student");
+    actionNextMatch = new QAction("Next Match");
+    actionPrevMatch = new QAction("Previous Match");
+    actionNextMatch->setEnabled(false);
+    actionPrevMatch->setEnabled(false);
     table = new QTableWidget(this);
     table->setColumnCount(4);
     table->setHorizontalHeaderLabels(QStringList() << "Student ID" << "Name" << "Birthday" << "Address");
@@ -39,6 +44,9 @@ mainWindow::mainWindow(QWidget *parent, controller *c) {
     menuHelp->addAction(actionAbout);
     menuEdit->addAction(actionAddStudent);
     menuEdit->addAction(actionDeleteStudent);
+    menuEdit->addAction(actionFindStudent);
+    menuEdit->addAction(actionPrevMatch);
+    menuEdit->addAction(actionNextMatch);
     menuFile->addAction(actionSettings);
     menuFile->addAction(actionManageUsers);
     menuFile->addAction(actionLogout);
@@ -74,11 +82,11 @@ mainWindow::mainWindow(QWidget *parent, controller *c) {
             return;
         }
 
-        for (QTableWidgetItem *item : selectedItems) {
+        for (QTableWidgetItem *item: selectedItems) {
             selectedRows.insert(item->row());
         }
 
-        for (int row : selectedRows) {
+        for (int row: selectedRows) {
             try {
                 c->deleteStudent(students[row].getNumber());
             } catch (const std::exception &e) {
@@ -108,14 +116,62 @@ mainWindow::mainWindow(QWidget *parent, controller *c) {
         close();
     });
 
+    connect(actionFindStudent, &QAction::triggered, this, [this]() {
+        bool ok;
+        QString keyword =
+                QInputDialog::getText(this, "Find Student", "Enter name, ID, or address:", QLineEdit::Normal, "", &ok);
 
-    setWindowTitle("Student Admission Management - Welcome "+c->loggedInUser.getUsername());
+        if (!ok || keyword.isEmpty())
+            return;
+
+        matchedRows.clear();
+        currentMatchIndex = -1;
+
+        for (int i = 0; i < table->rowCount(); ++i) {
+            for (int j = 0; j < table->columnCount(); ++j) {
+                QTableWidgetItem *item = table->item(i, j);
+                if (item && item->text().contains(keyword, Qt::CaseInsensitive)) {
+                    matchedRows.append(i);
+                    break;
+                }
+            }
+        }
+
+        if (matchedRows.isEmpty()) {
+            QMessageBox::information(this, "No Match", "No matching student found.");
+            actionNextMatch->setEnabled(false);
+            actionPrevMatch->setEnabled(false);
+            return;
+        }
+
+        currentMatchIndex = 0;
+        highlightMatch();
+
+        actionNextMatch->setEnabled(true);
+        actionPrevMatch->setEnabled(true);
+    });
+
+    connect(actionNextMatch, &QAction::triggered, this, [this]() {
+        if (matchedRows.isEmpty())
+            return;
+
+        currentMatchIndex = (currentMatchIndex + 1) % matchedRows.size(); // 循环
+        highlightMatch();
+    });
+
+    connect(actionPrevMatch, &QAction::triggered, this, [this]() {
+        if (matchedRows.isEmpty())
+            return;
+
+        currentMatchIndex = (currentMatchIndex - 1 + matchedRows.size()) % matchedRows.size(); // 循环
+        highlightMatch();
+    });
+
+    setWindowTitle("Student Admission Management - Welcome " + c->loggedInUser.getUsername());
     displayStudents();
 }
 
-mainWindow::~mainWindow() {
-
-}
+mainWindow::~mainWindow() {}
 
 void mainWindow::displayStudents() {
     updatingTable = true;
@@ -124,7 +180,7 @@ void mainWindow::displayStudents() {
     table->setRowCount(students.size());
 
     for (int i = 0; i < students.size(); ++i) {
-        student& s = students[i];
+        student &s = students[i];
         table->setItem(i, 0, new QTableWidgetItem(s.getNumber()));
         table->setItem(i, 1, new QTableWidgetItem(s.getName()));
         table->setItem(i, 2, new QTableWidgetItem(s.getBirthday().toString("yyyy-MM-dd")));
@@ -134,7 +190,8 @@ void mainWindow::displayStudents() {
 }
 
 void mainWindow::onCellChanged(int row, int column) {
-    if (updatingTable) return;
+    if (updatingTable)
+        return;
 
     QString studentId = table->item(row, 0)->text();
     QString name = table->item(row, 1)->text();
@@ -148,15 +205,10 @@ void mainWindow::onCellChanged(int row, int column) {
         return;
     }
 
-    const student s(
-        name,
-        QDate::fromString(birthdayStr, "yyyy-MM-dd"),
-        studentId,
-        address
-        );
+    const student s(name, QDate::fromString(birthdayStr, "yyyy-MM-dd"), studentId, address);
     try {
         c->modifyStudent(students[row].getNumber(), s);
-    } catch (const std::exception& e) {
+    } catch (const std::exception &e) {
         revertRow(row);
         QMessageBox::warning(this, "Error", e.what());
     }
@@ -173,5 +225,16 @@ void mainWindow::revertRow(int row) {
 
     updatingTable = false;
 }
+
+void mainWindow::highlightMatch() {
+    if (matchedRows.isEmpty() || currentMatchIndex < 0 || currentMatchIndex >= matchedRows.size())
+        return;
+
+    int row = matchedRows[currentMatchIndex];
+    table->clearSelection();
+    table->selectRow(row);
+    table->scrollToItem(table->item(row, 0));
+}
+
 
 #include "moc_mainWindow.cpp"

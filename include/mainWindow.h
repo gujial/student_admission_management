@@ -17,6 +17,7 @@
 #include <QList>
 #include <QListWidgetItem>
 #include <QSet>
+#include <QInputDialog>
 
 #include "controller.h"
 #include "userManageWindow.h"
@@ -39,16 +40,22 @@ private:
     QAction *actionSettings;
     QAction *actionManageUsers;
     QAction *actionLogout;
+    QAction *actionFindStudent;
+    QAction *actionNextMatch;
+    QAction *actionPrevMatch;
     QTableWidget *table;
     QGridLayout *layout;
     QWidget *central;
     QList<student> students;
     bool updatingTable = false;
     controller *c;
+    QList<int> matchedRows;
+    int currentMatchIndex = -1;
 
     void displayStudents();
     void onCellChanged(int row, int column);
     void revertRow(int row);
+    void highlightMatch();
 
 signals:
     void logoutRequested();
