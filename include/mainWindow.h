@@ -24,7 +24,7 @@
 class mainWindow : public QMainWindow {
     Q_OBJECT
 public:
-    explicit mainWindow(QWidget *parent = 0);
+    explicit mainWindow(QWidget *parent, controller *c);
     ~mainWindow() override;
 
 private:
@@ -38,16 +38,21 @@ private:
     QAction *actionDeleteStudent;
     QAction *actionSettings;
     QAction *actionManageUsers;
+    QAction *actionLogout;
     QTableWidget *table;
     QGridLayout *layout;
     QWidget *central;
-    controller *c = nullptr;
     QList<student> students;
     bool updatingTable = false;
+    controller *c;
 
     void displayStudents();
     void onCellChanged(int row, int column);
     void revertRow(int row);
+
+signals:
+    void logoutRequested();
+
 };
 
 

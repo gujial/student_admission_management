@@ -6,13 +6,13 @@
 
 #include "aboutDialog.h"
 #include "addStudentDialog.h"
-#include "loginDialog.h"
 
-mainWindow::mainWindow(QWidget *parent) {
+mainWindow::mainWindow(QWidget *parent, controller *c) {
     setWindowTitle("Student Admission Management");
     setWindowIcon(QIcon(":/assets/images/icon.png"));
 
     // 初始化成员变量
+    this->c = c;
     menu = new QMenuBar(this);
     menuFile = new QMenu("File");
     menuEdit = new QMenu("Edit");
@@ -22,17 +22,12 @@ mainWindow::mainWindow(QWidget *parent) {
     actionAddStudent = new QAction("Add Student");
     actionDeleteStudent = new QAction("Delete Student");
     actionSettings = new QAction("Settings");
+    actionLogout = new QAction("Logout");
     actionManageUsers = new QAction("Manage users");
     table = new QTableWidget(this);
     table->setColumnCount(4);
     table->setHorizontalHeaderLabels(QStringList() << "Student ID" << "Name" << "Birthday" << "Address");
     table->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
-    c = new controller(
-        "localhost",
-        "login",
-        "root",
-        "041109"
-        );
 
     // 设置布局
     central = new QWidget(this);
@@ -46,6 +41,7 @@ mainWindow::mainWindow(QWidget *parent) {
     menuEdit->addAction(actionDeleteStudent);
     menuFile->addAction(actionSettings);
     menuFile->addAction(actionManageUsers);
+    menuFile->addAction(actionLogout);
     menuFile->addAction(actionExit);
     menu->addMenu(menuFile);
     menu->addMenu(menuEdit);
@@ -55,9 +51,9 @@ mainWindow::mainWindow(QWidget *parent) {
     // 向布局中添加组件
     layout->addWidget(table);
 
-    connect(actionExit, &QAction::triggered, this, &mainWindow::close);
+    connect(actionExit, &QAction::triggered, this, &QApplication::quit);
 
-    connect(actionAddStudent, &QAction::triggered, this, [this]() {
+    connect(actionAddStudent, &QAction::triggered, this, [this, c]() {
         const auto addStudentDlg = new addStudentDialog(this, c);
         addStudentDlg->show();
         addStudentDlg->exec();
@@ -69,7 +65,7 @@ mainWindow::mainWindow(QWidget *parent) {
         aboutDlg->show();
     });
 
-    connect(actionDeleteStudent, &QAction::triggered, this, [this]() {
+    connect(actionDeleteStudent, &QAction::triggered, this, [this, c]() {
         QList<QTableWidgetItem *> selectedItems = table->selectedItems();
         QSet<int> selectedRows;
 
@@ -92,7 +88,7 @@ mainWindow::mainWindow(QWidget *parent) {
         displayStudents();
     });
 
-    connect(actionManageUsers, &QAction::triggered, this, [this]() {
+    connect(actionManageUsers, &QAction::triggered, this, [this, c]() {
         try {
             utils::checkUserPermission(c->loggedInUser.getTypeId());
         } catch (const std::exception &e) {
@@ -107,18 +103,18 @@ mainWindow::mainWindow(QWidget *parent) {
 
     connect(table, &QTableWidget::cellChanged, this, &mainWindow::onCellChanged);
 
-    const auto loginDlg = new loginDialog(this, c);
-    loginDlg->show();
-    if (loginDlg->exec() != QDialog::Accepted) {
-       throw std::runtime_error("Error during login");
-    }
+    connect(actionLogout, &QAction::triggered, this, [this]() {
+        emit logoutRequested();
+        close();
+    });
+
 
     setWindowTitle("Student Admission Management - Welcome "+c->loggedInUser.getUsername());
     displayStudents();
 }
 
 mainWindow::~mainWindow() {
-    delete c;
+
 }
 
 void mainWindow::displayStudents() {
