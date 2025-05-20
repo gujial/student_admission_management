@@ -27,6 +27,7 @@ public:
     QString getUserTypeName(int type_id);
     user getUser(const QString& email) const;
     void modifyUserPassword(const QString& email, const QString& password) const;
+    void deleteUser(const QString& email) const;
 
     void addStudent(student newStudent) const;
     void deleteStudent(const QString& studentNum) const;

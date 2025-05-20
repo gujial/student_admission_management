@@ -80,7 +80,7 @@ void controller::userRegister(const QString &username, const QString &password, 
 }
 
 void controller::modifyUser(const QString &email, const QString& newEmail, const QString& username, const QString& typeId) const {
-    utils::checkEmailFormat(email.toStdString());
+    utils::checkEmailFormat(newEmail.toStdString());
     utils::checkUsernameFormat(username.toStdString());
 
     QSqlQuery query(db);
@@ -228,6 +228,20 @@ void controller::modifyUserPassword(const QString &email, const QString &passwor
     query.bindValue(1, email);
     if (query.exec()) {
         qDebug() << "Modify user password successfully";
+    } else {
+        throw std::invalid_argument(query.lastError().text().toStdString());
+    }
+}
+
+void controller::deleteUser(const QString &email) const {
+    utils::checkUserPermission(this->loggedInUser.getTypeId());
+    utils::checkPasswordFormat(email.toStdString());
+
+    QSqlQuery query(db);
+    query.prepare("delete from user where email = ?;");
+    query.bindValue(0, email);
+    if (query.exec()) {
+        qDebug() << "Delete user successfully";
     } else {
         throw std::invalid_argument(query.lastError().text().toStdString());
     }

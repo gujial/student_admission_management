@@ -37,9 +37,9 @@ userManageWindow::userManageWindow(QWidget *parent, controller *c) {
     connect(actionExit, &QAction::triggered, this, &userManageWindow::close);
 
     connect(actionAddUser, &QAction::triggered, this, [this, c]() {
-        // const auto addUserDlg = new addUserDialog(this, c);
-        // addUserDlg->show();
-
+        const auto addUserDlg = new addUserDialog(this, c);
+        addUserDlg->show();
+        addUserDlg->exec();
         displayUsers();
     });
 
@@ -48,7 +48,7 @@ userManageWindow::userManageWindow(QWidget *parent, controller *c) {
         QSet<int> selectedRows;
 
         if (selectedItems.isEmpty()) {
-            QMessageBox::warning(this, "Error", "No Student selected");
+            QMessageBox::warning(this, "Error", "No user selected");
             return;
         }
 
@@ -58,7 +58,7 @@ userManageWindow::userManageWindow(QWidget *parent, controller *c) {
 
         for (int row : selectedRows) {
             try {
-                c->deleteStudent(users[row].getEmail());
+                c->deleteUser(users[row].getEmail());
             } catch (const std::exception &e) {
                 QMessageBox::warning(this, "Error", e.what());
             }
