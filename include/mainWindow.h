@@ -21,6 +21,7 @@
 
 #include "controller.h"
 #include "userManageWindow.h"
+#include "settingDialog.h"
 
 class mainWindow : public QMainWindow {
     Q_OBJECT
@@ -59,7 +60,6 @@ private:
 
 signals:
     void logoutRequested();
-
 };
 
 

@@ -63,7 +63,6 @@ mainWindow::mainWindow(QWidget *parent, controller *c) {
 
     connect(actionAddStudent, &QAction::triggered, this, [this, c]() {
         const auto addStudentDlg = new addStudentDialog(this, c);
-        addStudentDlg->show();
         addStudentDlg->exec();
         displayStudents();
     });
@@ -165,6 +164,17 @@ mainWindow::mainWindow(QWidget *parent, controller *c) {
 
         currentMatchIndex = (currentMatchIndex - 1 + matchedRows.size()) % matchedRows.size(); // 循环
         highlightMatch();
+    });
+
+    connect(actionSettings, &QAction::triggered, this, [this]() {
+        const auto settingDlg = new settingDialog(this);
+
+        connect(settingDlg, &settingDialog::saveSettingsRequested, [this]() {
+            emit logoutRequested();
+            close();
+        });
+
+        settingDlg->exec();
     });
 
     setWindowTitle("Student Admission Management - Welcome " + c->loggedInUser.getUsername());

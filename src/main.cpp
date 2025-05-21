@@ -6,6 +6,12 @@ int main(int argc, char *argv[]) {
     QApplication a(argc, argv);
 
     while (true) {
+        bool logoutRequested = false;
+
+        if (QSqlDatabase::contains("qt_sql_default_connection")) {
+            QSqlDatabase::removeDatabase("qt_sql_default_connection");
+        }
+
         auto config = utils::loadConfig("config/config.json");
         auto* c = new controller(
             QString::fromStdString(config["database_hostname"].get<std::string>()),
@@ -15,15 +21,13 @@ int main(int argc, char *argv[]) {
             config["database_port"].get<int>()
         );
 
-        loginDialog loginDlg(nullptr, c);
-        if (loginDlg.exec() != QDialog::Accepted) {
+        auto *loginDlg = new loginDialog(nullptr, c);
+        if (loginDlg->exec() != QDialog::Accepted) {
             break;
         }
 
         auto* e = new mainWindow(nullptr, c);
         e->resize(800, 600);
-
-        bool logoutRequested = false;
 
         QObject::connect(e, &mainWindow::logoutRequested, [&]() {
             logoutRequested = true;
@@ -35,6 +39,7 @@ int main(int argc, char *argv[]) {
 
         delete e;
         delete c;
+        delete loginDlg;
 
         if (!logoutRequested) {
             break;

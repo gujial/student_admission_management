@@ -40,7 +40,6 @@ userManageWindow::userManageWindow(QWidget *parent, controller *c) {
 
     connect(actionAddUser, &QAction::triggered, this, [this, c]() {
         const auto addUserDlg = new addUserDialog(this, c);
-        addUserDlg->show();
         addUserDlg->exec();
         displayUsers();
     });
@@ -83,7 +82,6 @@ userManageWindow::userManageWindow(QWidget *parent, controller *c) {
 
         try {
             const auto modifyPasswordDlg = new modifyPasswordDialog(this, c, users[selectedItems[0]->row()].getEmail());
-            modifyPasswordDlg->show();
             modifyPasswordDlg->exec();
             displayUsers();
         } catch (const std::exception &e) {
