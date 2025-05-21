@@ -12,6 +12,7 @@
 #include <QGridLayout>
 #include <QPushButton>
 #include <QMessageBox>
+#include <QComboBox>
 
 #include "controller.h"
 
@@ -34,7 +35,7 @@ private:
     QLabel *passwordLabel2;
     QLineEdit *passwordLineEdit2;
     QLabel *typeIdLabel;
-    QLineEdit *typeIdLineEdit;
+    QComboBox *typeIdComboBox;
     QGridLayout *layout;
     QPushButton *button;
 };

@@ -18,8 +18,13 @@ addUserDialog::addUserDialog(QWidget *parent, controller *c) {
     passwordLabel2 = new QLabel("Password again:");
     passwordLineEdit2 = new QLineEdit();
     passwordLineEdit2->setEchoMode(QLineEdit::Password);
-    typeIdLabel = new QLabel("Type Id:");
-    typeIdLineEdit = new QLineEdit();
+    typeIdLabel = new QLabel("User Type:");
+
+    typeIdComboBox = new QComboBox();
+    typeIdComboBox->addItem(c->getUserTypeName(0), 0);
+    typeIdComboBox->addItem(c->getUserTypeName(1), 1);
+    typeIdComboBox->setCurrentIndex(1);
+
     button = new QPushButton("Add User");
     layout = new QGridLayout();
 
@@ -32,7 +37,7 @@ addUserDialog::addUserDialog(QWidget *parent, controller *c) {
     layout->addWidget(passwordLabel2, 3, 0);
     layout->addWidget(passwordLineEdit2, 3, 1);
     layout->addWidget(typeIdLabel, 4, 0);
-    layout->addWidget(typeIdLineEdit, 4, 1);
+    layout->addWidget(typeIdComboBox, 4, 1);
     layout->addWidget(button, 5, 0, 1, 0);
     setLayout(layout);
 
@@ -56,7 +61,7 @@ void addUserDialog::addButtonClicked(controller *c) {
             usernameLineEdit->text(),
             passwordLineEdit->text(),
             emailLineEdit->text(),
-            typeIdLineEdit->text().toInt()
+            typeIdComboBox->currentData().toInt()
             );
         accept();
     } catch (const std::exception &e) {

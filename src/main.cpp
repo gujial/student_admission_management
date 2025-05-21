@@ -23,7 +23,7 @@ int main(int argc, char *argv[]) {
 
         e->show();
 
-        a.exec();
+        QApplication::exec();
 
         delete e;
 
