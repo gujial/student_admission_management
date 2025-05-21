@@ -4,7 +4,7 @@
 
 #include "controller.h"
 
-controller::controller(const QString& db_hostname, const QString& db_name, const QString& db_user, const QString& db_password)
+controller::controller(const QString& db_hostname, const QString& db_name, const QString& db_user, const QString& db_password, int db_port)
 : loggedInUser(user(
     "anonymous",
     "",
@@ -16,6 +16,7 @@ controller::controller(const QString& db_hostname, const QString& db_name, const
     db.setDatabaseName(db_name);
     db.setUserName(db_user);
     db.setPassword(db_password);
+    db.setPort(db_port);
 
     if (!db.open()) {
         throw std::runtime_error("Failed to open database");

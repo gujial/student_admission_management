@@ -10,6 +10,10 @@
 #include <openssl/md5.h>
 #include <openssl/evp.h>
 #include <iomanip>
+#include <nlohmann/json.hpp>
+#include <fstream>
+#include <filesystem>
+#include <iostream>
 
 class utils {
 public:
@@ -23,6 +27,7 @@ public:
 
     static void checkStudentNameFormat(const std::string& name);
     static void checkStudentNumberFormat(const std::string& number);
+    static nlohmann::json loadConfig(const std::string& path);
 };
 
 

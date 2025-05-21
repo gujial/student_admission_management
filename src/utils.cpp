@@ -90,3 +90,29 @@ void utils::checkStudentNumberFormat(const std::string &number) {
         throw std::invalid_argument("student number is too short");
     }
 }
+
+nlohmann::json utils::loadConfig(const std::string &path) {
+    namespace fs = std::filesystem;
+
+    if (!fs::exists(path)) {
+        std::cout << "No config file. Creating a new one..." << std::endl;
+        nlohmann::json defaultConfig = {
+            {"database_hostname", "localhost"},
+            {"database_port", 3306},
+            {"database_name", "login"},
+            {"database_username", "root"},
+            {"database_password", "041109"}
+          };
+
+        fs::create_directories(fs::path(path).parent_path());
+        std::ofstream out(path);
+        out << defaultConfig.dump(4);
+        out.close();
+        return defaultConfig;
+    }
+
+    std::ifstream file(path);
+    nlohmann::json config;
+    file >> config;
+    return config;
+}

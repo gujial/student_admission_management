@@ -30,7 +30,7 @@ addStudentDialog::addStudentDialog(QWidget *parent, controller *c) {
     layout->addWidget(button, 4, 0, 1, 0);
     setLayout(layout);
 
-    connect(button, &QPushButton::clicked, this, [=]() {
+    connect(button, &QPushButton::clicked, this, [this, c]() {
         addButtonClicked(c);
     });
 }

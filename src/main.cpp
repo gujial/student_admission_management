@@ -1,12 +1,20 @@
 #include "mainWindow.h"
 #include "loginDialog.h"
+#include "utils.h"
 
 int main(int argc, char *argv[]) {
     QApplication a(argc, argv);
 
-    auto* c = new controller("localhost", "login", "root", "041109");
-
     while (true) {
+        auto config = utils::loadConfig("config/config.json");
+        auto* c = new controller(
+            QString::fromStdString(config["database_hostname"].get<std::string>()),
+            QString::fromStdString(config["database_name"].get<std::string>()),
+            QString::fromStdString(config["database_username"].get<std::string>()),
+            QString::fromStdString(config["database_password"].get<std::string>()),
+            config["database_port"].get<int>()
+        );
+
         loginDialog loginDlg(nullptr, c);
         if (loginDlg.exec() != QDialog::Accepted) {
             break;
@@ -26,13 +34,12 @@ int main(int argc, char *argv[]) {
         QApplication::exec();
 
         delete e;
+        delete c;
 
         if (!logoutRequested) {
             break;
         }
     }
-
-    delete c;
 
     return 0;
 }
