@@ -4,7 +4,7 @@
 int main(int argc, char *argv[]) {
     QApplication a(argc, argv);
 
-    controller* c = new controller("localhost", "login", "root", "041109");
+    auto* c = new controller("localhost", "login", "root", "041109");
 
     while (true) {
         loginDialog loginDlg(nullptr, c);
@@ -12,14 +12,13 @@ int main(int argc, char *argv[]) {
             break;
         }
 
-        mainWindow* e = new mainWindow(nullptr, c);
+        auto* e = new mainWindow(nullptr, c);
         e->resize(800, 600);
 
         bool logoutRequested = false;
 
         QObject::connect(e, &mainWindow::logoutRequested, [&]() {
             logoutRequested = true;
-            e->close();
         });
 
         e->show();
