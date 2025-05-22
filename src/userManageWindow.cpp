@@ -21,6 +21,11 @@ userManageWindow::userManageWindow(QWidget *parent, controller *c) {
     table->setHorizontalHeaderLabels(QStringList() << "Username" << "Email" << "Type ID");
     table->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
 
+    actionExit->setShortcut(QKeySequence(QKeySequence("Ctrl+Q")));
+    actionAddUser->setShortcut(QKeySequence("Ctrl+N"));
+    actionDeleteUser->setShortcut(QKeySequence(Qt::Key_Delete));
+    actionModifyPassword->setShortcut(QKeySequence("Ctrl+M"));
+
     central = new QWidget(this);
     layout = new QGridLayout(central);
     central->setLayout(layout);

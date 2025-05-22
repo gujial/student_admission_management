@@ -34,6 +34,17 @@ mainWindow::mainWindow(QWidget *parent, controller *c) {
     table->setHorizontalHeaderLabels(QStringList() << "Student ID" << "Name" << "Birthday" << "Address");
     table->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
 
+    actionAddStudent->setShortcut(QKeySequence("Ctrl+N"));
+    actionDeleteStudent->setShortcut(QKeySequence(Qt::Key_Delete));
+    actionFindStudent->setShortcut(QKeySequence("Ctrl+F"));
+    actionPrevMatch->setShortcut(QKeySequence(Qt::Key_F2));
+    actionNextMatch->setShortcut(QKeySequence(Qt::Key_F3));
+    actionSettings->setShortcut(QKeySequence("Ctrl+P"));
+    actionManageUsers->setShortcut(QKeySequence("Ctrl+U"));
+    actionExit->setShortcut(QKeySequence("Ctrl+Q"));
+    actionAbout->setShortcut(QKeySequence(Qt::Key_F1));
+    actionLogout->setShortcut(QKeySequence("Ctrl+L"));
+
     // 设置布局
     central = new QWidget(this);
     layout = new QGridLayout(central);
