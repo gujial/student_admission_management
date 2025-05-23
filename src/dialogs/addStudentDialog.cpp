@@ -45,9 +45,16 @@ void addStudentDialog::addButtonClicked(controller *c) {
     }
 
     try {
+        auto birthday = QDate::fromString(birthdayLineEdit->text(), "yyyy-MM-dd");
+
+        if (!birthday.isValid()) {
+            QMessageBox::warning(this, "Error", "Birthday format should be yyyy-MM-dd.");
+            return;
+        }
+
         c->addStudent({
             nameLineEdit->text(),
-            QDate::fromString(birthdayLineEdit->text(), "yyyy-MM-dd"),
+            birthday,
             numberLineEdit->text(),
             addressLineEdit->text()
         });
