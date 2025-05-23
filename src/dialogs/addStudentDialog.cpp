@@ -39,6 +39,11 @@ addStudentDialog::~addStudentDialog() {
 }
 
 void addStudentDialog::addButtonClicked(controller *c) {
+    if (numberLineEdit->text().isEmpty() || nameLineEdit->text().isEmpty() || birthdayLineEdit->text().isEmpty()) {
+        QMessageBox::warning(this, "Error", "Number, name and birthday can't be empty.");
+        return;
+    }
+
     try {
         c->addStudent({
             nameLineEdit->text(),

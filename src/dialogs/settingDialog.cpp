@@ -4,6 +4,8 @@
 
 #include "settingDialog.h"
 
+#include <QMessageBox>
+
 settingDialog::settingDialog(QWidget *parent) {
     setWindowTitle("Setting");
     setWindowIcon(QIcon(":/assets/images/icon.png"));
@@ -47,6 +49,11 @@ settingDialog::settingDialog(QWidget *parent) {
 settingDialog::~settingDialog() {  }
 
 void settingDialog::okButtonClicked() {
+    if (hostnameLineEdit->text().isEmpty() || databaseNameLineEdit->text().isEmpty() || portLineEdit->text().isEmpty() ||userNameLineEdit->text().isEmpty() ||passwordLineEdit->text().isEmpty()) {
+        QMessageBox::information(this, "Error", "Please enter a valid setting");
+        return;
+    }
+
     emit saveSettingsRequested();
     accept();
 }

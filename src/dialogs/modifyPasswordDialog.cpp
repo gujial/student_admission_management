@@ -34,6 +34,11 @@ modifyPasswordDialog::~modifyPasswordDialog() {
 }
 
 void modifyPasswordDialog::buttonClicked(controller *c, const QString& email) {
+    if (passwordLineEdit->text().isEmpty()) {
+        QMessageBox::warning(this, "Error", "Password can't be empty");
+        return;
+    }
+
     if (passwordLineEdit->text() != passwordLineEdit2->text()) {
         QMessageBox::warning(this, "Error", "Two passwords are not same");
         return;

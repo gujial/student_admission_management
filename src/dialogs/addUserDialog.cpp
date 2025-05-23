@@ -51,6 +51,11 @@ addUserDialog::~addUserDialog() {
 }
 
 void addUserDialog::addButtonClicked(controller *c) {
+    if (usernameLineEdit->text().isEmpty() || emailLineEdit->text().isEmpty() || passwordLineEdit->text().isEmpty()) {
+        QMessageBox::warning(this, "Error", "All information can't be empty.");
+        return;
+    }
+
     if (passwordLineEdit->text() != passwordLineEdit2->text()) {
         QMessageBox::warning(this, "Error", "Two passwords are not same");
         return;
