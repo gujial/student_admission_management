@@ -65,6 +65,7 @@ void controller::userLogin(const QString &username, const QString &password) {
 }
 
 void controller::userRegister(const QString &username, const QString &password, const QString &email, int type_id) const {
+    utils::checkUserPermission(this->loggedInUser.getTypeId());
     utils::checkFormat(username.toStdString(), email.toStdString(), password.toStdString());
 
     QSqlQuery query(db);
@@ -81,6 +82,7 @@ void controller::userRegister(const QString &username, const QString &password, 
 }
 
 void controller::modifyUser(const QString &email, const QString& newEmail, const QString& username, const QString& typeId) const {
+    utils::checkUserPermission(this->loggedInUser.getTypeId());
     utils::checkEmailFormat(newEmail.toStdString());
     utils::checkUsernameFormat(username.toStdString());
 
