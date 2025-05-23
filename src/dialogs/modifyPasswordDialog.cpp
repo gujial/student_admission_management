@@ -10,8 +10,10 @@ modifyPasswordDialog::modifyPasswordDialog(QWidget *parent, controller *c, const
 
     passwordLabel = new QLabel("new password:");
     passwordLineEdit = new QLineEdit();
+    passwordLineEdit->setEchoMode(QLineEdit::Password);
     passwordLabel2 = new QLabel("password again:");
     passwordLineEdit2 = new QLineEdit();
+    passwordLineEdit2->setEchoMode(QLineEdit::Password);
     button = new QPushButton("Modify password");
     layout = new QGridLayout();
 
