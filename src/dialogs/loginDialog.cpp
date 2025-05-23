@@ -32,6 +32,11 @@ loginDialog::~loginDialog() {
 }
 
 void loginDialog::loginButtonClicked(controller *c) {
+    if (userNameLineEdit->text().isEmpty() || passwordLineEdit->text().isEmpty()) {
+        QMessageBox::warning(this, "Error", "Please enter username and password");
+        return;
+    }
+
     try {
         c->userLogin(userNameLineEdit->text(), passwordLineEdit->text());
         accept();
