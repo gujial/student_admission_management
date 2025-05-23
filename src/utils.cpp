@@ -75,10 +75,15 @@ void utils::checkUserPermission(int type_id) {
 }
 
 void utils::checkStudentNameFormat(const std::string &name) {
-    char firstLetter = name.at(0);
-    int firstLetterInt = firstLetter;
-    if (firstLetterInt < 65 || firstLetterInt > 122) {
-        throw std::invalid_argument("First charactor of name must be letters");
+    if (name.empty()) {
+        throw std::invalid_argument("Name cannot be empty.");
+    }
+
+    // 匹配以字母（A-Z, a-z）或中文字符开头，后面是字母或中文字符
+    static const std::regex nameRegex("^[A-Za-z\u4e00-\u9fa5][A-Za-z\u4e00-\u9fa5]*$");
+
+    if (!std::regex_match(name, nameRegex)) {
+        throw std::invalid_argument("Invalid name format. Name must start with a letter or Chinese character and contain only letters or Chinese characters.");
     }
 }
 
