@@ -45,10 +45,21 @@ void addStudentDialog::addButtonClicked(controller *c) {
     }
 
     try {
-        auto birthday = QDate::fromString(birthdayLineEdit->text(), "yyyy-MM-dd");
+        const QString birthdayStr = birthdayLineEdit->text();
 
+        if (const QRegularExpression regex("^\\d{4}-\\d{2}-\\d{2}$"); !regex.match(birthdayStr).hasMatch()) {
+            QMessageBox::warning(this, "Invalid date", "Birthday format must be yyyy-MM-dd.");
+            return;
+        }
+
+        const QDate birthday = QDate::fromString(birthdayStr, "yyyy-MM-dd");
         if (!birthday.isValid()) {
-            QMessageBox::warning(this, "Error", "Birthday format should be yyyy-MM-dd.");
+            QMessageBox::warning(this, "Invalid date", "Input value is invalid.");
+            return;
+        }
+
+        if (QDate today = QDate::currentDate(); birthday > today || birthday.year() < 1900) {
+            QMessageBox::warning(this, "Invalid date", "Input value is invalid.");
             return;
         }
 

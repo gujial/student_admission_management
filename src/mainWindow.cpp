@@ -225,15 +225,14 @@ void mainWindow::onCellChanged(int row, int column) {
         return;
     }
 
-    QDate birthday = QDate::fromString(birthdayStr, "yyyy-MM-dd");
+    const QDate birthday = QDate::fromString(birthdayStr, "yyyy-MM-dd");
     if (!birthday.isValid()) {
         QMessageBox::warning(this, "Invalid date", "Input value is invalid.");
         revertRow(row);
         return;
     }
 
-    QDate today = QDate::currentDate();
-    if (birthday > today || birthday.year() < 1900) {
+    if (QDate today = QDate::currentDate(); birthday > today || birthday.year() < 1900) {
         QMessageBox::warning(this, "Invalid date", "Input value is invalid.");
         revertRow(row);
         return;
