@@ -88,11 +88,12 @@ void utils::checkStudentNameFormat(const std::string &name) {
 }
 
 void utils::checkStudentNumberFormat(const std::string &number) {
-    if (number.length() > 20) {
-        throw std::invalid_argument("student number is too long");
+    if (number.length() != 10) {
+        throw std::invalid_argument("Length of student number should be 10.");
     }
-    if (number.length() < 6) {
-        throw std::invalid_argument("student number is too short");
+
+    if (const QRegularExpression regex("^800\\d*$"); !regex.match(QString::fromStdString(number)).hasMatch()) {
+        throw std::invalid_argument("Number should start with 800.");
     }
 }
 

@@ -18,6 +18,7 @@
 #include <QListWidgetItem>
 #include <QSet>
 #include <QInputDialog>
+#include <regex>
 
 #include "controller.h"
 #include "userManageWindow.h"

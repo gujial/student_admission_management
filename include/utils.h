@@ -14,6 +14,7 @@
 #include <fstream>
 #include <filesystem>
 #include <iostream>
+#include <QRegularExpression>
 
 class utils {
 public:

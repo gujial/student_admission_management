@@ -219,9 +219,22 @@ void mainWindow::onCellChanged(int row, int column) {
     QString birthdayStr = table->item(row, 2)->text();
     QString address = table->item(row, 3)->text();
 
+    if (const QRegularExpression regex("^\\d{4}-\\d{2}-\\d{2}$"); !regex.match(birthdayStr).hasMatch()) {
+        QMessageBox::warning(this, "Invalid date", "Birthday format must be yyyy-MM-dd.");
+        revertRow(row);
+        return;
+    }
+
     QDate birthday = QDate::fromString(birthdayStr, "yyyy-MM-dd");
     if (!birthday.isValid()) {
-        QMessageBox::warning(this, "Invalid date", "Birthday format must be yyyy-MM-dd");
+        QMessageBox::warning(this, "Invalid date", "Input value is invalid.");
+        revertRow(row);
+        return;
+    }
+
+    QDate today = QDate::currentDate();
+    if (birthday > today || birthday.year() < 1900) {
+        QMessageBox::warning(this, "Invalid date", "Input value is invalid.");
         revertRow(row);
         return;
     }
