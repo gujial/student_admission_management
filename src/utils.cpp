@@ -122,3 +122,10 @@ nlohmann::json utils::loadConfig(const std::string &path) {
     file >> config;
     return config;
 }
+
+void utils::checkGenderFormat(const std::string &gender) {
+    if (gender != "Male" && gender != "Female") {
+        throw std::invalid_argument("Gender must be Male, Female");
+    }
+}
+

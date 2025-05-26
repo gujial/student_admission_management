@@ -12,6 +12,7 @@
 #include <QLineEdit>
 #include <QPushButton>
 #include <QMessageBox>
+#include <QComboBox>
 
 #include "controller.h"
 
@@ -33,6 +34,12 @@ private:
     QLineEdit *birthdayLineEdit;
     QLabel *addressLabel;
     QLineEdit *addressLineEdit;
+    QLabel *departmentLabel;
+    QLineEdit *departmentLineEdit;
+    QLabel *classnameLabel;
+    QLineEdit *classnameLineEdit;
+    QLabel *genderLabel;
+    QComboBox *genderComboBox;
     QGridLayout *layout;
     QPushButton *button;
 };

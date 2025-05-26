@@ -30,8 +30,8 @@ mainWindow::mainWindow(QWidget *parent, controller *c) {
     actionNextMatch->setEnabled(false);
     actionPrevMatch->setEnabled(false);
     table = new QTableWidget(this);
-    table->setColumnCount(4);
-    table->setHorizontalHeaderLabels(QStringList() << "Student ID" << "Name" << "Birthday" << "Address");
+    table->setColumnCount(7);
+    table->setHorizontalHeaderLabels(QStringList() << "Student ID" << "Name" << "Gender" << "Birthday" << "Address" << "Department" << "Classname");
     table->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
 
     actionAddStudent->setShortcut(QKeySequence("Ctrl+N"));
@@ -204,8 +204,22 @@ void mainWindow::displayStudents() {
         student &s = students[i];
         table->setItem(i, 0, new QTableWidgetItem(s.getNumber()));
         table->setItem(i, 1, new QTableWidgetItem(s.getName()));
-        table->setItem(i, 2, new QTableWidgetItem(s.getBirthday().toString("yyyy-MM-dd")));
-        table->setItem(i, 3, new QTableWidgetItem(s.getAddress()));
+
+        QComboBox *genderBox = new QComboBox();
+        genderBox->addItems({"Male", "Female"});
+        genderBox->setCurrentText(s.getGender());
+        table->setCellWidget(i, 2, genderBox);
+
+        table->setItem(i, 3, new QTableWidgetItem(s.getBirthday().toString("yyyy-MM-dd")));
+        table->setItem(i, 4, new QTableWidgetItem(s.getAddress()));
+        table->setItem(i, 5, new QTableWidgetItem(s.getDepartment()));
+        table->setItem(i, 6, new QTableWidgetItem(s.getClassname()));
+
+        connect(genderBox, &QComboBox::currentTextChanged, this, [=](const QString &newGender) {
+            if (!updatingTable) {
+                onCellChanged(i, 2);
+            }
+        });
     }
     updatingTable = false;
 }
@@ -216,8 +230,12 @@ void mainWindow::onCellChanged(int row, int column) {
 
     QString studentId = table->item(row, 0)->text();
     QString name = table->item(row, 1)->text();
-    QString birthdayStr = table->item(row, 2)->text();
-    QString address = table->item(row, 3)->text();
+    QString birthdayStr = table->item(row, 3)->text();
+    QString address = table->item(row, 4)->text();
+    QString department = table->item(row, 5)->text();
+    QString classname = table->item(row, 6)->text();
+    QComboBox *genderBox = qobject_cast<QComboBox *>(table->cellWidget(row, 2));
+    QString gender = genderBox ? genderBox->currentText() : "";
 
     if (const QRegularExpression regex("^\\d{4}-\\d{2}-\\d{2}$"); !regex.match(birthdayStr).hasMatch()) {
         QMessageBox::warning(this, "Invalid date", "Birthday format must be yyyy-MM-dd.");
@@ -238,9 +256,18 @@ void mainWindow::onCellChanged(int row, int column) {
         return;
     }
 
-    const student s(name, QDate::fromString(birthdayStr, "yyyy-MM-dd"), studentId, address);
+    const student s(
+        name,
+        QDate::fromString(birthdayStr, "yyyy-MM-dd"),
+        studentId,
+        address,
+        department,
+        classname,
+        gender
+        );
     try {
         c->modifyStudent(students[row].getNumber(), s);
+        students = c->getStudents();
     } catch (const std::exception &e) {
         revertRow(row);
         QMessageBox::warning(this, "Error", e.what());
@@ -253,8 +280,13 @@ void mainWindow::revertRow(int row) {
     student &s = students[row];
     table->item(row, 0)->setText(s.getNumber());
     table->item(row, 1)->setText(s.getName());
-    table->item(row, 2)->setText(s.getBirthday().toString("yyyy-MM-dd"));
-    table->item(row, 3)->setText(s.getAddress());
+    QComboBox *genderBox = qobject_cast<QComboBox *>(table->cellWidget(row, 2));
+    if (genderBox)
+        genderBox->setCurrentText(s.getGender());
+    table->item(row, 3)->setText(s.getBirthday().toString("yyyy-MM-dd"));
+    table->item(row, 4)->setText(s.getAddress());
+    table->item(row, 5)->setText(s.getDepartment());
+    table->item(row, 6)->setText(s.getClassname());
 
     updatingTable = false;
 }

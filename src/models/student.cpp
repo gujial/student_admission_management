@@ -4,11 +4,22 @@
 
 #include "student.h"
 
-student::student(const QString& name, const QDate& birthday, const QString& number, const QString& address) {
+student::student(
+    const QString& name,
+    const QDate& birthday,
+    const QString& number,
+    const QString& address,
+    const QString& department,
+    const QString& classname,
+    const QString& gender
+    ) {
     this->name = name;
     this->birthday = birthday;
     this->number = number;
     this->address = address;
+    this->department = department;
+    this->classname = classname;
+    this->gender = gender;
 }
 
 QString student::getName() {
@@ -41,4 +52,28 @@ QDate student::getBirthday() const {
 
 void student::setBirthday(const QDate & birthday) {
     this->birthday = birthday;
+}
+
+QString student::getClassname() const {
+    return this->classname;
+}
+
+void student::setClassname(const QString & classname) {
+    this->classname = classname;
+}
+
+QString student::getGender() const {
+    return this->gender;
+}
+
+void student::setGender(const QString & gender) {
+    this->gender = gender;
+}
+
+QString student::getDepartment() const {
+    return this->department;
+}
+
+void student::setDepartment(const QString & department) {
+    this->department = department;
 }

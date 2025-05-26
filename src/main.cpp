@@ -27,7 +27,7 @@ int main(int argc, char *argv[]) {
         }
 
         auto* e = new mainWindow(nullptr, c);
-        e->resize(800, 600);
+        e->resize(1280, 720);
 
         QObject::connect(e, &mainWindow::logoutRequested, [&]() {
             logoutRequested = true;

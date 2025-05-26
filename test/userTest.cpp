@@ -11,9 +11,10 @@ int main(int argc, char *argv[]) {
         "localhost",
         "login",
         "root",
-        "041109"
+        "041109",
+        3306
     );
 
-    c->userRegister("studentuser", "studentuser", "456@123.123", 1);
+    c->userRegister("administrator", "administrator", "456@123.123", 0);
     // c->userLogin("administrator", "administrator");
 }

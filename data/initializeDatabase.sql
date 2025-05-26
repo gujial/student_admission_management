@@ -19,7 +19,10 @@ create table student(
     number varchar(255) not null primary key,
     name varchar(255) not null,
     birthday date not null,
-    address varchar(255)
+    department varchar(255),
+    classname varchar(255),
+    address varchar(255),
+    gender varchar(16)
 );
 
 insert into user_type(type_id, type_name) VALUES (0, 'administrator'),(1,'user');

@@ -121,13 +121,17 @@ void controller::addStudent(student newStudent) const {
     utils::checkUserPermission(this->loggedInUser.getTypeId());
     utils::checkStudentNameFormat(newStudent.getName().toStdString());
     utils::checkStudentNumberFormat(newStudent.getNumber().toStdString());
+    utils::checkGenderFormat(newStudent.getGender().toStdString());
 
     QSqlQuery query(db);
-    query.prepare("insert into student(number, name, birthday, address) values (?, ?, ?, ?);");
+    query.prepare("insert into student(number, name, birthday, address, department, classname, gender) values (?, ?, ?, ?, ?, ?, ?);");
     query.bindValue(0, newStudent.getNumber());
     query.bindValue(1, newStudent.getName());
     query.bindValue(2, newStudent.getBirthday());
     query.bindValue(3, newStudent.getAddress());
+    query.bindValue(4, newStudent.getDepartment());
+    query.bindValue(5, newStudent.getClassname());
+    query.bindValue(6, newStudent.getGender());
     if (query.exec()) {
         qDebug() << "Add student successfully";
     } else {
@@ -152,14 +156,18 @@ void controller::modifyStudent(const QString& studentNum, student newStudent) co
     utils::checkUserPermission(this->loggedInUser.getTypeId());
     utils::checkStudentNameFormat(newStudent.getName().toStdString());
     utils::checkStudentNumberFormat(newStudent.getNumber().toStdString());
+    utils::checkGenderFormat(newStudent.getGender().toStdString());
 
     QSqlQuery query(db);
-    query.prepare("update student set name = ?, birthday = ?, address = ?, number = ? where number = ?;");
+    query.prepare("update student set name = ?, birthday = ?, address = ?, number = ?, department = ?, classname = ?, gender = ? where number = ?;");
     query.bindValue(0, newStudent.getName());
     query.bindValue(1, newStudent.getBirthday());
     query.bindValue(2, newStudent.getAddress());
     query.bindValue(3, newStudent.getNumber());
-    query.bindValue(4, studentNum);
+    query.bindValue(4, newStudent.getDepartment());
+    query.bindValue(5, newStudent.getClassname());
+    query.bindValue(6, newStudent.getGender());
+    query.bindValue(7, studentNum);
     if (query.exec()) {
         qDebug() << "Modify student successfully";
     } else {
@@ -171,7 +179,7 @@ QList<student> controller::getStudents() const {
     QList<student> students;
 
     QSqlQuery query(db);
-    query.prepare("select number, name, birthday, address from student;");
+    query.prepare("select number, name, birthday, address, department, classname, gender from student;");
     query.exec();
 
     while (query.next()) {
@@ -179,7 +187,10 @@ QList<student> controller::getStudents() const {
             query.value(1).toString(),
             QDate::fromString(query.value(2).toString(),"yyyy-MM-dd"),
             query.value(0).toString(),
-            query.value(3).toString()
+            query.value(3).toString(),
+            query.value(4).toString(),
+            query.value(5).toString(),
+            query.value(6).toString()
             );
     }
 
@@ -214,7 +225,10 @@ student controller::getStudent(const QString& studentNum) const {
             query.value(0).toString(),
             QDate::fromString(query.value(2).toString()),
             query.value(1).toString(),
-            query.value(3).toString()
+            query.value(3).toString(),
+            query.value(4).toString(),
+            query.value(5).toString(),
+            query.value(6).toString()
         };
     }
     throw std::runtime_error("Student not found");

@@ -25,6 +25,7 @@ public:
     static void checkFormat(const std::string& name, const std::string& password);
     static std::string md5(const std::string& src);
     static void checkUserPermission(int type_id);
+    static void checkGenderFormat(const std::string& gender);
 
     static void checkStudentNameFormat(const std::string& name);
     static void checkStudentNumberFormat(const std::string& number);

@@ -16,6 +16,14 @@ addStudentDialog::addStudentDialog(QWidget *parent, controller *c) {
     birthdayLineEdit = new QLineEdit();
     addressLabel = new QLabel("address:");
     addressLineEdit = new QLineEdit();
+    departmentLabel = new QLabel("department:");
+    departmentLineEdit = new QLineEdit();
+    classnameLabel = new QLabel("classname:");
+    classnameLineEdit = new QLineEdit();
+    genderLabel = new QLabel("gender:");
+    genderComboBox = new QComboBox();
+    genderComboBox->addItem("Male");
+    genderComboBox->addItem("Female");
     layout = new QGridLayout();
     button = new QPushButton("Add Student");
 
@@ -27,7 +35,13 @@ addStudentDialog::addStudentDialog(QWidget *parent, controller *c) {
     layout->addWidget(birthdayLineEdit, 2, 1);
     layout->addWidget(addressLabel, 3, 0);
     layout->addWidget(addressLineEdit, 3, 1);
-    layout->addWidget(button, 4, 0, 1, 0);
+    layout->addWidget(departmentLabel, 4, 0);
+    layout->addWidget(departmentLineEdit, 4, 1);
+    layout->addWidget(classnameLabel, 5, 0);
+    layout->addWidget(classnameLineEdit, 5, 1);
+    layout->addWidget(genderLabel, 6, 0);
+    layout->addWidget(genderComboBox, 6, 1);
+    layout->addWidget(button, 7, 0, 1, 0);
     setLayout(layout);
 
     connect(button, &QPushButton::clicked, this, [this, c]() {
@@ -67,7 +81,10 @@ void addStudentDialog::addButtonClicked(controller *c) {
             nameLineEdit->text(),
             birthday,
             numberLineEdit->text(),
-            addressLineEdit->text()
+            addressLineEdit->text(),
+            departmentLineEdit->text(),
+            classnameLineEdit->text(),
+            genderComboBox->currentText(),
         });
         accept();
     } catch (const std::exception &e) {
