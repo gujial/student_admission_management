@@ -13,7 +13,7 @@ addStudentDialog::addStudentDialog(QWidget *parent, controller *c) {
     nameLabel = new QLabel("name:");
     nameLineEdit = new QLineEdit();
     birthdayLabel = new QLabel("birthday:");
-    birthdayLineEdit = new QLineEdit();
+    birthdayLineEdit = new QLineEdit(QDateTime::currentDateTime().toString("yyyy-MM-dd"));
     addressLabel = new QLabel("address:");
     addressLineEdit = new QLineEdit();
     departmentLabel = new QLabel("department:");
