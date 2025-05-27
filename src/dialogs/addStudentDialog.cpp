@@ -10,10 +10,13 @@ addStudentDialog::addStudentDialog(QWidget *parent, controller *c) {
 
     numberLabel = new QLabel("student number:");
     numberLineEdit = new QLineEdit();
+    numberLineEdit->setPlaceholderText("Start with 800");
     nameLabel = new QLabel("name:");
     nameLineEdit = new QLineEdit();
+    nameLineEdit->setPlaceholderText("Start with letter or chineses charactor");
     birthdayLabel = new QLabel("birthday:");
     birthdayLineEdit = new QLineEdit(QDateTime::currentDateTime().toString("yyyy-MM-dd"));
+    birthdayLineEdit->setPlaceholderText("yyyy-MM-dd");
     addressLabel = new QLabel("address:");
     addressLineEdit = new QLineEdit();
     departmentLabel = new QLabel("department:");
