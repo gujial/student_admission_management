@@ -216,7 +216,7 @@ void mainWindow::displayStudents() {
         table->setItem(i, 5, new QTableWidgetItem(s.getDepartment()));
         table->setItem(i, 6, new QTableWidgetItem(s.getClassname()));
 
-        connect(genderBox, &QComboBox::currentTextChanged, this, [this](const QString &newGender) {
+        connect(genderBox, &QComboBox::currentTextChanged, this, [this, i](const QString &newGender) {
             if (!updatingTable) {
                 onCellChanged(i, 2);
             }
