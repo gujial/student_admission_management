@@ -12,7 +12,8 @@ int main(int argc, char *argv[]) {
         "localhost",
         "login",
         "root",
-        "041109"
+        "041109",
+        3306
     );
 
     QDate birthday = QDate(2020,2,5);
@@ -22,6 +23,9 @@ int main(int argc, char *argv[]) {
         "aaaa",
         birthday,
         "465567",
-        "china"
+        "china",
+        "department",
+        "classname",
+        "male"
     });
 }
