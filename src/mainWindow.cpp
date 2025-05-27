@@ -74,6 +74,7 @@ mainWindow::mainWindow(QWidget *parent, controller *c) {
 
     connect(actionAddStudent, &QAction::triggered, this, [this, c]() {
         const auto addStudentDlg = new addStudentDialog(this, c);
+        addStudentDlg->resize(400, 300);
         addStudentDlg->exec();
         displayStudents();
     });

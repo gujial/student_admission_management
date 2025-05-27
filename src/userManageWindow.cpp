@@ -45,6 +45,7 @@ userManageWindow::userManageWindow(QWidget *parent, controller *c) {
 
     connect(actionAddUser, &QAction::triggered, this, [this, c]() {
         const auto addUserDlg = new addUserDialog(this, c);
+        addUserDlg->resize(400, 300);
         addUserDlg->exec();
         displayUsers();
     });
