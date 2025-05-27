@@ -120,7 +120,7 @@ void userManageWindow::displayUsers() {
         QComboBox* comboBox = getTypeComboBox(u.getTypeId());
         table->setCellWidget(i, 2, comboBox);
 
-        connect(comboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, [=](int) {
+        connect(comboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, [this](int) {
             if (updatingTable) return;
             QString username = table->item(i, 0)->text();
             QString email = table->item(i, 1)->text();
