@@ -115,7 +115,24 @@ void userManageWindow::displayUsers() {
         user& u = users[i];
         table->setItem(i, 0, new QTableWidgetItem(u.getUsername()));
         table->setItem(i, 1, new QTableWidgetItem(u.getEmail()));
-        table->setItem(i, 2, new QTableWidgetItem(QString::number(u.getTypeId())));
+
+        QComboBox* comboBox = getTypeComboBox(u.getTypeId());
+        table->setCellWidget(i, 2, comboBox);
+
+        connect(comboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, [=](int) {
+            if (updatingTable) return;
+            QString username = table->item(i, 0)->text();
+            QString email = table->item(i, 1)->text();
+            int newTypeId = comboBox->currentData().toInt();
+
+            try {
+                c->modifyUser(users[i].getEmail(), email, username, QString::number(newTypeId));
+                users[i].setTypeId(newTypeId);
+            } catch (const std::exception& e) {
+                QMessageBox::warning(this, "Error", e.what());
+                displayUsers();
+            }
+        });
     }
     updatingTable = false;
 }
@@ -125,10 +142,10 @@ void userManageWindow::onCellChanged(int row, int column) {
 
     QString username = table->item(row, 0)->text();
     QString email = table->item(row, 1)->text();
-    QString typeId = table->item(row, 2)->text();
+    int typeId = users[row].getTypeId();
 
     try {
-        c->modifyUser(users[row].getEmail(), email, username, typeId);
+        c->modifyUser(users[row].getEmail(), email, username, QString::number(typeId));
     } catch (const std::exception& e) {
         revertRow(row);
         QMessageBox::warning(this, "Error", e.what());
@@ -141,9 +158,21 @@ void userManageWindow::revertRow(int row) {
     user &u = users[row];
     table->item(row, 0)->setText(u.getUsername());
     table->item(row, 1)->setText(u.getEmail());
-    table->item(row, 2)->setText(QString::number(u.getTypeId()));
+
+    QComboBox* comboBox = qobject_cast<QComboBox*>(table->cellWidget(row, 2));
+    if (comboBox) {
+        comboBox->setCurrentIndex(comboBox->findData(u.getTypeId()));
+    }
 
     updatingTable = false;
+}
+
+QComboBox *userManageWindow::getTypeComboBox(int currentTypeId) const {
+    QComboBox *comboBox = new QComboBox();
+    comboBox->addItem(c->getUserTypeName(0), 0);
+    comboBox->addItem(c->getUserTypeName(1), 1);
+    comboBox->setCurrentIndex(comboBox->findData(currentTypeId));
+    return comboBox;
 }
 
 #include "moc_userManageWindow.cpp"

@@ -45,6 +45,7 @@ private:
     void displayUsers();
     void onCellChanged(int row, int column);
     void revertRow(int row);
+    QComboBox *getTypeComboBox(int currentTypeId) const;
 };
 
 #endif //USERMANAGEWINDOW_H
