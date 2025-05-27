@@ -11,6 +11,10 @@ find_package(Qt6 COMPONENTS
 
 find_package(OpenSSL REQUIRED)
 
+if (WIN32)
+    include_directories(${PROJECT_SOURCE_DIR}/externals/json/single_include)
+endif()
+
 add_executable(student_admission_management ${SOURCES}
         ${PROJECT_SOURCE_DIR}/resources.qrc)
 target_link_libraries(student_admission_management
