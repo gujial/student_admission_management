@@ -53,13 +53,17 @@ mainWindow::mainWindow(QWidget *parent, controller *c) {
 
     // 设置菜单
     menuHelp->addAction(actionAbout);
-    menuEdit->addAction(actionAddStudent);
-    menuEdit->addAction(actionDeleteStudent);
+
+    if (c->loggedInUser.getTypeId() == 0) {
+        menuEdit->addAction(actionAddStudent);
+        menuEdit->addAction(actionDeleteStudent);
+        menuFile->addAction(actionManageUsers);
+    }
+
     menuEdit->addAction(actionFindStudent);
     menuEdit->addAction(actionPrevMatch);
     menuEdit->addAction(actionNextMatch);
     menuFile->addAction(actionSettings);
-    menuFile->addAction(actionManageUsers);
     menuFile->addAction(actionLogout);
     menuFile->addAction(actionExit);
     menu->addMenu(menuFile);
