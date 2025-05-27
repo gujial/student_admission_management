@@ -26,7 +26,7 @@ jobs:
         os: [ubuntu-latest, windows-latest]
         build_type: [Release]
         c_compiler: [gcc, clang, cl]
-        qt_version: ['6.5.3']
+        qt_version: ['6.9.0']
         include:
           - os: windows-latest
             c_compiler: cl
@@ -64,7 +64,6 @@ jobs:
         version: ${{ matrix.qt_version }}
         host: ${{ runner.os == 'Windows' && 'windows' || runner.os == 'Linux' && 'linux'}}
         target: desktop
-        modules: 'qtbase'
         cache: true
 
     - name: Install dependencies (Linux only)
