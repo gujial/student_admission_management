@@ -14,6 +14,10 @@ find_package(Qt6 COMPONENTS
 
 find_package(OpenSSL REQUIRED)
 
+if (WIN32)
+    include_directories(${PROJECT_SOURCE_DIR}/externals/json/single_include)
+endif()
+
 add_executable(userTest ${SOURCES}
         userTest.cpp)
 target_link_libraries(userTest
