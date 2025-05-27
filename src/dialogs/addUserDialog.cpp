@@ -29,6 +29,8 @@ addUserDialog::addUserDialog(QWidget *parent, controller *c) {
     typeIdComboBox->addItem(c->getUserTypeName(1), 1);
     typeIdComboBox->setCurrentIndex(1);
 
+    passwordWarnLabel = new QLabel("Two passwords are not same");
+    passwordWarnLabel->setHidden(true);
     button = new QPushButton("Add User");
     layout = new QGridLayout();
 
@@ -40,13 +42,22 @@ addUserDialog::addUserDialog(QWidget *parent, controller *c) {
     layout->addWidget(passwordLineEdit, 2, 1);
     layout->addWidget(passwordLabel2, 3, 0);
     layout->addWidget(passwordLineEdit2, 3, 1);
-    layout->addWidget(typeIdLabel, 4, 0);
-    layout->addWidget(typeIdComboBox, 4, 1);
-    layout->addWidget(button, 5, 0, 1, 0);
+    layout->addWidget(passwordWarnLabel, 4, 1);
+    layout->addWidget(typeIdLabel, 5, 0);
+    layout->addWidget(typeIdComboBox, 5, 1);
+    layout->addWidget(button, 6, 0, 1, 0);
     setLayout(layout);
 
     connect(button, &QPushButton::clicked, this, [this, c]() {
         addButtonClicked(c);
+    });
+
+    connect(passwordLineEdit2, &QLineEdit::textChanged, this, [this]() {
+        if (passwordLineEdit2->text() != passwordLineEdit->text()) {
+            passwordWarnLabel->setHidden(false);
+        } else {
+            passwordWarnLabel->setHidden(true);
+        }
     });
 }
 
