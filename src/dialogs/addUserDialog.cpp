@@ -10,13 +10,17 @@ addUserDialog::addUserDialog(QWidget *parent, controller *c) {
 
     usernameLabel = new QLabel("Username:");
     usernameLineEdit = new QLineEdit();
+    usernameLineEdit->setPlaceholderText("Start with letter");
     emailLabel = new QLabel("Email:");
     emailLineEdit = new QLineEdit();
+    emailLineEdit->setPlaceholderText("xxx@xxx.xxx");
     passwordLabel = new QLabel("Password:");
     passwordLineEdit = new QLineEdit();
+    passwordLineEdit->setPlaceholderText("More than 6 and less than 20");
     passwordLineEdit->setEchoMode(QLineEdit::Password);
     passwordLabel2 = new QLabel("Password again:");
     passwordLineEdit2 = new QLineEdit();
+    passwordLineEdit2->setPlaceholderText("Should be same with last line edit");
     passwordLineEdit2->setEchoMode(QLineEdit::Password);
     typeIdLabel = new QLabel("User Type:");
 
