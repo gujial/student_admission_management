@@ -81,10 +81,14 @@ void controller::userRegister(const QString &username, const QString &password, 
     }
 }
 
-void controller::modifyUser(const QString &email, const QString& newEmail, const QString& username, const QString& typeId) const {
+void controller::modifyUser(const QString &email, const QString& newEmail, const QString& username, const QString& typeId) {
     utils::checkUserPermission(this->loggedInUser.getTypeId());
     utils::checkEmailFormat(newEmail.toStdString());
     utils::checkUsernameFormat(username.toStdString());
+
+    if (typeId.toInt() == 1) {
+        checkOperationSafe(newEmail);
+    }
 
     QSqlQuery query(db);
     query.prepare("update user set username = ?, type_id = ?, email = ? where email = ?;");
@@ -264,3 +268,8 @@ void controller::deleteUser(const QString &email) const {
     }
 }
 
+void controller::checkOperationSafe(const QString &email) {
+    if (email == loggedInUser.getEmail()) {
+        throw std::invalid_argument("Can't operate to yourself.");
+    }
+}

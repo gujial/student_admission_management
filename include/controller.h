@@ -23,7 +23,7 @@ public:
     void userLogin(const QString& username, const QString& password);
     void userRegister(const QString& username, const QString& password, const QString& email, int type_id) const;
     QList<user> getUsers() const;
-    void modifyUser(const QString &email, const QString& newEmail, const QString& username, const QString& typeId) const;
+    void modifyUser(const QString &email, const QString& newEmail, const QString& username, const QString& typeId);
     QString getUserTypeName(int type_id);
     user getUser(const QString& email) const;
     void modifyUserPassword(const QString& email, const QString& password) const;
@@ -37,6 +37,8 @@ public:
 private:
     QSqlDatabase db;
     std::map<int, QString> userTypes;
+
+    void checkOperationSafe(const QString& email);
 };
 
 
