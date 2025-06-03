@@ -18,7 +18,7 @@ userManageWindow::userManageWindow(QWidget *parent, controller *c) {
     actionModifyPassword = new QAction("Modify password");
     table = new QTableWidget(this);
     table->setColumnCount(3);
-    table->setHorizontalHeaderLabels(QStringList() << "Username" << "Email" << "Type ID");
+    table->setHorizontalHeaderLabels(QStringList() << "Username" << "Email" << "User Type");
     table->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
 
     actionExit->setShortcut(QKeySequence(QKeySequence("Ctrl+Q")));
