@@ -29,6 +29,7 @@ private:
     QLineEdit *passwordLineEdit;
     QLabel *passwordLabel2;
     QLineEdit *passwordLineEdit2;
+    QLabel *passwordWarnLabel;
     QPushButton *button;
     QGridLayout *layout;
 };

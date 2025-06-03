@@ -14,6 +14,8 @@ modifyPasswordDialog::modifyPasswordDialog(QWidget *parent, controller *c, const
     passwordLabel2 = new QLabel("password again:");
     passwordLineEdit2 = new QLineEdit();
     passwordLineEdit2->setEchoMode(QLineEdit::Password);
+    passwordWarnLabel = new QLabel("Two passwords are not same");
+    passwordWarnLabel->setHidden(true);
     button = new QPushButton("Modify password");
     layout = new QGridLayout();
 
@@ -21,11 +23,20 @@ modifyPasswordDialog::modifyPasswordDialog(QWidget *parent, controller *c, const
     layout->addWidget(passwordLineEdit, 0, 1);
     layout->addWidget(passwordLabel2, 1, 0);
     layout->addWidget(passwordLineEdit2, 1, 1);
+    layout->addWidget(passwordWarnLabel, 2, 0, 1, 0);
     layout->addWidget(button, 3, 0, 1, 0);
     setLayout(layout);
 
     connect(button, &QPushButton::clicked, this, [this, email, c]() {
         buttonClicked(c, email);
+    });
+
+    connect(passwordLineEdit2, &QLineEdit::textChanged, this, [this]() {
+        if (passwordLineEdit2->text() != passwordLineEdit->text()) {
+            passwordWarnLabel->setHidden(false);
+        } else {
+            passwordWarnLabel->setHidden(true);
+        }
     });
 }
 
