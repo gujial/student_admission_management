@@ -31,7 +31,8 @@ mainWindow::mainWindow(QWidget *parent, controller *c) {
     actionPrevMatch->setEnabled(false);
     table = new QTableWidget(this);
     table->setColumnCount(7);
-    table->setHorizontalHeaderLabels(QStringList() << "Student ID" << "Name" << "Gender" << "Birthday" << "Address" << "Department" << "Classname");
+    table->setHorizontalHeaderLabels(QStringList() << "Student ID" << "Name" << "Gender" << "Birthday" << "Address"
+                                                   << "Department" << "Classname");
     table->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
 
     actionAddStudent->setShortcut(QKeySequence("Ctrl+N"));
@@ -215,15 +216,51 @@ void mainWindow::displayStudents() {
         genderBox->setCurrentText(s.getGender());
         table->setCellWidget(i, 2, genderBox);
 
-        table->setItem(i, 3, new QTableWidgetItem(s.getBirthday().toString("yyyy-MM-dd")));
-        table->setItem(i, 4, new QTableWidgetItem(s.getAddress()));
-        table->setItem(i, 5, new QTableWidgetItem(s.getDepartment()));
-        table->setItem(i, 6, new QTableWidgetItem(s.getClassname()));
-
         connect(genderBox, &QComboBox::currentTextChanged, this, [this, i](const QString &newGender) {
             if (!updatingTable) {
                 onCellChanged(i, 2);
             }
+        });
+
+        table->setItem(i, 3, new QTableWidgetItem(s.getBirthday().toString("yyyy-MM-dd")));
+        table->setItem(i, 4, new QTableWidgetItem(s.getAddress()));
+
+        QComboBox *departmentBox = new QComboBox();
+        for (const auto &d: c->departments)
+            departmentBox->addItem(d.getName());
+        departmentBox->setCurrentText(s.getDepartment());
+        table->setCellWidget(i, 5, departmentBox);
+
+        connect(departmentBox, &QComboBox::currentTextChanged, this, [this, i](const QString &newDepartment) {
+            if (updatingTable)
+                return;
+
+            if (auto *classnameBox = qobject_cast<QComboBox *>(table->cellWidget(i, 6))) {
+                classnameBox->clear();
+                for (const auto &cls: c->classnames) {
+                    if (cls.getDepartment() == newDepartment) {
+                        classnameBox->addItem(cls.getName());
+                    }
+                }
+                if (classnameBox->count() > 0) {
+                    classnameBox->setCurrentIndex(0);
+                }
+            }
+
+            onCellChanged(i, 5);
+        });
+
+        QComboBox *classnameBox = new QComboBox();
+        for (const auto &cls: c->classnames)
+            if (cls.getDepartment() == departmentBox->currentText()) {
+                classnameBox->addItem(cls.getName());
+            }
+        classnameBox->setCurrentText(s.getClassname());
+        table->setCellWidget(i, 6, classnameBox);
+
+        connect(classnameBox, &QComboBox::currentTextChanged, this, [this, i](const QString &) {
+            if (!updatingTable)
+                onCellChanged(i, 6);
         });
     }
     updatingTable = false;
@@ -237,8 +274,13 @@ void mainWindow::onCellChanged(int row, int column) {
     QString name = table->item(row, 1)->text();
     QString birthdayStr = table->item(row, 3)->text();
     QString address = table->item(row, 4)->text();
-    QString department = table->item(row, 5)->text();
-    QString classname = table->item(row, 6)->text();
+
+    QComboBox *departmentBox = qobject_cast<QComboBox *>(table->cellWidget(row, 5));
+    QString department = departmentBox ? departmentBox->currentText() : "";
+
+    QComboBox *classnameBox = qobject_cast<QComboBox *>(table->cellWidget(row, 6));
+    QString classname = classnameBox ? classnameBox->currentText() : "";
+
     QComboBox *genderBox = qobject_cast<QComboBox *>(table->cellWidget(row, 2));
     QString gender = genderBox ? genderBox->currentText() : "";
 
@@ -261,15 +303,8 @@ void mainWindow::onCellChanged(int row, int column) {
         return;
     }
 
-    const student s(
-        name,
-        QDate::fromString(birthdayStr, "yyyy-MM-dd"),
-        studentId,
-        address,
-        department,
-        classname,
-        gender
-        );
+    const student s(name, QDate::fromString(birthdayStr, "yyyy-MM-dd"), studentId, address, department, classname,
+                    gender);
     try {
         c->modifyStudent(students[row].getNumber(), s);
         students = c->getStudents();
@@ -290,8 +325,14 @@ void mainWindow::revertRow(int row) {
         genderBox->setCurrentText(s.getGender());
     table->item(row, 3)->setText(s.getBirthday().toString("yyyy-MM-dd"));
     table->item(row, 4)->setText(s.getAddress());
-    table->item(row, 5)->setText(s.getDepartment());
-    table->item(row, 6)->setText(s.getClassname());
+
+    QComboBox *departmentBox = qobject_cast<QComboBox *>(table->cellWidget(row, 5));
+    if (departmentBox)
+        departmentBox->setCurrentText(s.getDepartment());
+
+    QComboBox *classnameBox = qobject_cast<QComboBox *>(table->cellWidget(row, 6));
+    if (classnameBox)
+        classnameBox->setCurrentText(s.getClassname());
 
     updatingTable = false;
 }

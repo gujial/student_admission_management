@@ -13,10 +13,14 @@
 #include "student.h"
 #include "utils.h"
 #include "user.h"
+#include "classname.h"
+#include "department.h"
 
 class controller {
 public:
     user loggedInUser;
+    QList<department> departments;
+    QList<classname> classnames;
 
     controller(const QString& db_hostname, const QString& db_name, const QString& db_user, const QString& db_password, int db_port);
     ~controller();
@@ -34,6 +38,9 @@ public:
     QList<student> getStudents() const;
     void modifyStudent(const QString& studentNum, student newStudent) const;
     student getStudent(const QString& studentNum) const;
+
+    void getDepartments();
+    void getClassnames();
 private:
     QSqlDatabase db;
     std::map<int, QString> userTypes;

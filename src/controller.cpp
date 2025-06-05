@@ -59,6 +59,9 @@ void controller::userLogin(const QString &username, const QString &password) {
             query.value(2).toString(),
             query.value(3).toInt()
             );
+
+        this->getDepartments();
+        this->getClassnames();
     } else {
         throw std::invalid_argument("Login failed. No matched password");
     }
@@ -273,3 +276,39 @@ void controller::checkOperationSafe(const QString &email) {
         throw std::invalid_argument("Can't operate to yourself.");
     }
 }
+
+void controller::getDepartments() {
+    QList<department> departments;
+
+    QSqlQuery query(db);
+    query.prepare("select name, number from department;");
+    query.exec();
+
+    while (query.next()) {
+        departments.emplace_back(
+            query.value(0).toString(),
+            query.value(1).toString()
+            );
+    }
+
+    this->departments = departments;
+}
+
+void controller::getClassnames() {
+    QList<classname> classnames;
+
+    QSqlQuery query(db);
+    query.prepare("select name, number, department from classname;");
+    query.exec();
+
+    while (query.next()) {
+        classnames.emplace_back(
+            query.value(0).toString(),
+            query.value(1).toString(),
+            query.value(2).toString()
+            );
+    }
+
+    this->classnames = classnames;
+}
+

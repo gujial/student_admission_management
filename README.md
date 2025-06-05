@@ -148,3 +148,11 @@ void controller::userRegister(const QString &username, const QString &password, 
 2. 修改构造函数传入的数据库连接信息
 3. 构建并运行程序
 4. 默认登录用户为 `"anonymous"`，权限最低
+
+---
+
+## To-Do
+- [ ] 使用列表选择学院和班级
+- [ ] 通过学院与班级检查学号格式
+- [ ] 生日日期限制
+- [ ] 邮箱格式即时检查
