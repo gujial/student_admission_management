@@ -206,34 +206,51 @@ void mainWindow::displayStudents() {
     table->clearContents();
     table->setRowCount(students.size());
 
+    const bool readOnly = c->loggedInUser.getTypeId() != 0;
+
     for (int i = 0; i < students.size(); ++i) {
         student &s = students[i];
-        table->setItem(i, 0, new QTableWidgetItem(s.getNumber()));
-        table->setItem(i, 1, new QTableWidgetItem(s.getName()));
 
+        auto *idItem = new QTableWidgetItem(s.getNumber());
+        auto *nameItem = new QTableWidgetItem(s.getName());
+        auto *birthdayItem = new QTableWidgetItem(s.getBirthday().toString("yyyy-MM-dd"));
+        auto *addressItem = new QTableWidgetItem(s.getAddress());
+
+        if (readOnly) {
+            idItem->setFlags(idItem->flags() & ~Qt::ItemIsEditable);
+            nameItem->setFlags(nameItem->flags() & ~Qt::ItemIsEditable);
+            birthdayItem->setFlags(birthdayItem->flags() & ~Qt::ItemIsEditable);
+            addressItem->setFlags(addressItem->flags() & ~Qt::ItemIsEditable);
+        }
+
+        table->setItem(i, 0, idItem);
+        table->setItem(i, 1, nameItem);
+        table->setItem(i, 3, birthdayItem);
+        table->setItem(i, 4, addressItem);
+
+        // Gender ComboBox
         QComboBox *genderBox = new QComboBox();
         genderBox->addItems({"Male", "Female"});
         genderBox->setCurrentText(s.getGender());
+        genderBox->setEnabled(!readOnly);
         table->setCellWidget(i, 2, genderBox);
 
-        connect(genderBox, &QComboBox::currentTextChanged, this, [this, i](const QString &newGender) {
-            if (!updatingTable) {
+        connect(genderBox, &QComboBox::currentTextChanged, this, [this, i, readOnly](const QString &) {
+            if (!readOnly && !updatingTable)
                 onCellChanged(i, 2);
-            }
         });
 
-        table->setItem(i, 3, new QTableWidgetItem(s.getBirthday().toString("yyyy-MM-dd")));
-        table->setItem(i, 4, new QTableWidgetItem(s.getAddress()));
-
+        // Department ComboBox
         QComboBox *departmentBox = new QComboBox();
-        for (const auto &d: c->departments)
+        for (const auto &d: c->departments) {
             departmentBox->addItem(d.getName());
+        }
         departmentBox->setCurrentText(s.getDepartment());
+        departmentBox->setEnabled(!readOnly);
         table->setCellWidget(i, 5, departmentBox);
 
-        connect(departmentBox, &QComboBox::currentTextChanged, this, [this, i](const QString &newDepartment) {
-            if (updatingTable)
-                return;
+        connect(departmentBox, &QComboBox::currentTextChanged, this, [this, i, readOnly](const QString &newDepartment) {
+            if (updatingTable || readOnly) return;
 
             if (auto *classnameBox = qobject_cast<QComboBox *>(table->cellWidget(i, 6))) {
                 classnameBox->clear();
@@ -250,19 +267,23 @@ void mainWindow::displayStudents() {
             onCellChanged(i, 5);
         });
 
+        // Classname ComboBox
         QComboBox *classnameBox = new QComboBox();
-        for (const auto &cls: c->classnames)
+        for (const auto &cls: c->classnames) {
             if (cls.getDepartment() == departmentBox->currentText()) {
                 classnameBox->addItem(cls.getName());
             }
+        }
         classnameBox->setCurrentText(s.getClassname());
+        classnameBox->setEnabled(!readOnly);
         table->setCellWidget(i, 6, classnameBox);
 
-        connect(classnameBox, &QComboBox::currentTextChanged, this, [this, i](const QString &) {
-            if (!updatingTable)
+        connect(classnameBox, &QComboBox::currentTextChanged, this, [this, i, readOnly](const QString &) {
+            if (!readOnly && !updatingTable)
                 onCellChanged(i, 6);
         });
     }
+
     updatingTable = false;
     table->resizeColumnsToContents();
 }
