@@ -22,6 +22,7 @@ int main(int argc, char *argv[]) {
         );
 
         auto *loginDlg = new loginDialog(nullptr, c);
+        loginDlg->adjustSize();
         if (loginDlg->exec() != QDialog::Accepted) {
             break;
         }

@@ -86,6 +86,7 @@ mainWindow::mainWindow(QWidget *parent, controller *c) {
 
     connect(actionAbout, &QAction::triggered, this, [this]() {
         const auto aboutDlg = new aboutDialog(this);
+        aboutDlg->adjustSize();
         aboutDlg->show();
     });
 
