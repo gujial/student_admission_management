@@ -33,7 +33,7 @@ mainWindow::mainWindow(QWidget *parent, controller *c) {
     table->setColumnCount(7);
     table->setHorizontalHeaderLabels(QStringList() << "Student ID" << "Name" << "Gender" << "Birthday" << "Address"
                                                    << "Department" << "Classname");
-    table->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+    table->horizontalHeader()->setSectionResizeMode(QHeaderView::Interactive);
 
     actionAddStudent->setShortcut(QKeySequence("Ctrl+N"));
     actionDeleteStudent->setShortcut(QKeySequence(Qt::Key_Delete));
@@ -264,6 +264,7 @@ void mainWindow::displayStudents() {
         });
     }
     updatingTable = false;
+    table->resizeColumnsToContents();
 }
 
 void mainWindow::onCellChanged(int row, int column) {
