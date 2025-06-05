@@ -20,9 +20,17 @@ addStudentDialog::addStudentDialog(QWidget *parent, controller *c) {
     addressLabel = new QLabel("address:");
     addressLineEdit = new QLineEdit();
     departmentLabel = new QLabel("department:");
-    departmentLineEdit = new QLineEdit();
+    departmentComboBox = new QComboBox();
+    for (const auto &dept: c->departments) {
+        departmentComboBox->addItem(dept.getName());
+    }
     classnameLabel = new QLabel("classname:");
-    classnameLineEdit = new QLineEdit();
+    classnameComboBox = new QComboBox();
+    for (const auto &cls: c->classnames) {
+        if (cls.getDepartment() == departmentComboBox->currentText()) {
+            classnameComboBox->addItem(cls.getName());
+        }
+    }
     genderLabel = new QLabel("gender:");
     genderComboBox = new QComboBox();
     genderComboBox->addItem("Male");
@@ -39,21 +47,29 @@ addStudentDialog::addStudentDialog(QWidget *parent, controller *c) {
     layout->addWidget(addressLabel, 3, 0);
     layout->addWidget(addressLineEdit, 3, 1);
     layout->addWidget(departmentLabel, 4, 0);
-    layout->addWidget(departmentLineEdit, 4, 1);
+    layout->addWidget(departmentComboBox, 4, 1);
     layout->addWidget(classnameLabel, 5, 0);
-    layout->addWidget(classnameLineEdit, 5, 1);
+    layout->addWidget(classnameComboBox, 5, 1);
     layout->addWidget(genderLabel, 6, 0);
     layout->addWidget(genderComboBox, 6, 1);
     layout->addWidget(button, 7, 0, 1, 0);
     setLayout(layout);
 
-    connect(button, &QPushButton::clicked, this, [this, c]() {
-        addButtonClicked(c);
+    connect(button, &QPushButton::clicked, this, [this, c]() { addButtonClicked(c); });
+
+    connect(departmentComboBox, &QComboBox::currentTextChanged, this, [this, c]() {
+        classnameComboBox->clear();
+        QString currentDept = departmentComboBox->currentText();
+
+        for (const auto &cls: c->classnames) {
+            if (cls.getDepartment() == currentDept) {
+                classnameComboBox->addItem(cls.getName());
+            }
+        }
     });
 }
 
-addStudentDialog::~addStudentDialog() {
-}
+addStudentDialog::~addStudentDialog() {}
 
 void addStudentDialog::addButtonClicked(controller *c) {
     if (numberLineEdit->text().isEmpty() || nameLineEdit->text().isEmpty() || birthdayLineEdit->text().isEmpty()) {
@@ -81,13 +97,13 @@ void addStudentDialog::addButtonClicked(controller *c) {
         }
 
         c->addStudent({
-            nameLineEdit->text(),
-            birthday,
-            numberLineEdit->text(),
-            addressLineEdit->text(),
-            departmentLineEdit->text(),
-            classnameLineEdit->text(),
-            genderComboBox->currentText(),
+                nameLineEdit->text(),
+                birthday,
+                numberLineEdit->text(),
+                addressLineEdit->text(),
+                departmentComboBox->currentText(),
+                classnameComboBox->currentText(),
+                genderComboBox->currentText(),
         });
         accept();
     } catch (const std::exception &e) {

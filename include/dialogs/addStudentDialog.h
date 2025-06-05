@@ -35,11 +35,11 @@ private:
     QLabel *addressLabel;
     QLineEdit *addressLineEdit;
     QLabel *departmentLabel;
-    QLineEdit *departmentLineEdit;
     QLabel *classnameLabel;
-    QLineEdit *classnameLineEdit;
     QLabel *genderLabel;
     QComboBox *genderComboBox;
+    QComboBox *departmentComboBox;
+    QComboBox *classnameComboBox;
     QGridLayout *layout;
     QPushButton *button;
 };
