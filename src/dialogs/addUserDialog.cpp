@@ -13,7 +13,7 @@ addUserDialog::addUserDialog(QWidget *parent, controller *c) {
     usernameLineEdit->setPlaceholderText("Start with letter");
     emailLabel = new QLabel("Email:");
     emailLineEdit = new QLineEdit();
-    emailLineEdit->setPlaceholderText("xxx@xxx.xxx");
+    emailLineEdit->setPlaceholderText("Format is xxx@xxx.xxx and should be letters");
     passwordLabel = new QLabel("Password:");
     passwordLineEdit = new QLineEdit();
     passwordLineEdit->setPlaceholderText("More than 6 and less than 20");

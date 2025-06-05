@@ -33,14 +33,16 @@ public:
     void modifyUserPassword(const QString& email, const QString& password) const;
     void deleteUser(const QString& email) const;
 
-    void addStudent(student newStudent) const;
+    void addStudent(student newStudent);
     void deleteStudent(const QString& studentNum) const;
     QList<student> getStudents() const;
-    void modifyStudent(const QString& studentNum, student newStudent) const;
+    void modifyStudent(const QString& studentNum, student newStudent);
     student getStudent(const QString& studentNum) const;
 
     void getDepartments();
     void getClassnames();
+    QString getDepartmentNumber(const QString& departmentName);
+    QString getClassnameNumber(const QString& className);
 private:
     QSqlDatabase db;
     std::map<int, QString> userTypes;

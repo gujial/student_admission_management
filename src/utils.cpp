@@ -86,13 +86,21 @@ void utils::checkStudentNameFormat(const std::string &name) {
     }
 }
 
-void utils::checkStudentNumberFormat(const std::string &number) {
+void utils::checkStudentNumberFormat(const std::string &number, const std::string& departmentNumber, const std::string& classnameNumber) {
     if (number.length() != 10) {
         throw std::invalid_argument("Length of student number should be 10.");
     }
 
-    if (const QRegularExpression regex("^800\\d*$"); !regex.match(QString::fromStdString(number)).hasMatch()) {
-        throw std::invalid_argument("Number should start with 800.");
+    if (!std::all_of(number.begin(), number.end(), ::isdigit)) {
+        throw std::invalid_argument("Student number must contain only digits.");
+    }
+
+    if (number.substr(0, 4) != departmentNumber) {
+        throw std::invalid_argument("The first four digits must match the department number.");
+    }
+
+    if (number.substr(5, 2) != classnameNumber) {
+        throw std::invalid_argument("The 6th and 7th digits must match the classname number.");
     }
 }
 

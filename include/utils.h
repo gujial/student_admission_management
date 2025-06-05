@@ -28,7 +28,7 @@ public:
     static void checkGenderFormat(const std::string& gender);
 
     static void checkStudentNameFormat(const std::string& name);
-    static void checkStudentNumberFormat(const std::string& number);
+    static void checkStudentNumberFormat(const std::string& number, const std::string& departmentNumber, const std::string& classnameNumber);
     static nlohmann::json loadConfig(const std::string& path);
 };
 

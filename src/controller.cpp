@@ -124,10 +124,12 @@ QList<user> controller::getUsers() const {
     return users;
 }
 
-void controller::addStudent(student newStudent) const {
+void controller::addStudent(student newStudent) {
     utils::checkUserPermission(this->loggedInUser.getTypeId());
     utils::checkStudentNameFormat(newStudent.getName().toStdString());
-    utils::checkStudentNumberFormat(newStudent.getNumber().toStdString());
+    utils::checkStudentNumberFormat(newStudent.getNumber().toStdString(),
+        getDepartmentNumber(newStudent.getDepartment()).toStdString(),
+        getClassnameNumber(newStudent.getClassname()).toStdString());
     utils::checkGenderFormat(newStudent.getGender().toStdString());
 
     QSqlQuery query(db);
@@ -159,10 +161,12 @@ void controller::deleteStudent(const QString& studentNum) const {
     }
 }
 
-void controller::modifyStudent(const QString& studentNum, student newStudent) const {
+void controller::modifyStudent(const QString& studentNum, student newStudent) {
     utils::checkUserPermission(this->loggedInUser.getTypeId());
     utils::checkStudentNameFormat(newStudent.getName().toStdString());
-    utils::checkStudentNumberFormat(newStudent.getNumber().toStdString());
+    utils::checkStudentNumberFormat(newStudent.getNumber().toStdString(),
+        getDepartmentNumber(newStudent.getDepartment()).toStdString(),
+        getClassnameNumber(newStudent.getClassname()).toStdString());
     utils::checkGenderFormat(newStudent.getGender().toStdString());
 
     QSqlQuery query(db);
@@ -310,5 +314,23 @@ void controller::getClassnames() {
     }
 
     this->classnames = classnames;
+}
+
+QString controller::getDepartmentNumber(const QString& departmentName) {
+    for (const auto &department : this->departments ) {
+        if (department.getName() == departmentName) {
+            return department.getNumber();
+        }
+    }
+    throw std::invalid_argument("Department not found");
+}
+
+QString controller::getClassnameNumber(const QString& className) {
+    for (const auto &classname : this->classnames ) {
+        if (classname.getName() == className) {
+            return classname.getNumber();
+        }
+    }
+    throw std::invalid_argument("Classname not found");
 }
 
