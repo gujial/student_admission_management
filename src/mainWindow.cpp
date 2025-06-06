@@ -251,9 +251,11 @@ void mainWindow::displayStudents() {
         table->setCellWidget(i, 5, departmentBox);
 
         connect(departmentBox, &QComboBox::currentTextChanged, this, [this, i, readOnly](const QString &newDepartment) {
-            if (updatingTable || readOnly) return;
+            if (updatingTable || readOnly)
+                return;
 
             if (auto *classnameBox = qobject_cast<QComboBox *>(table->cellWidget(i, 6))) {
+                classnameBox->blockSignals(true); // 防止触发 currentTextChanged
                 classnameBox->clear();
                 for (const auto &cls: c->classnames) {
                     if (cls.getDepartment() == newDepartment) {
@@ -261,12 +263,15 @@ void mainWindow::displayStudents() {
                     }
                 }
                 if (classnameBox->count() > 0) {
-                    classnameBox->setCurrentIndex(0);
+                    classnameBox->setCurrentIndex(0); // 设置为第一个候选项
                 }
+                classnameBox->blockSignals(false);
             }
 
             onCellChanged(i, 5);
+            onCellChanged(i, 6);
         });
+
 
         // Classname ComboBox
         QComboBox *classnameBox = new QComboBox();
@@ -326,11 +331,15 @@ void mainWindow::onCellChanged(int row, int column) {
         return;
     }
 
+    studentId.replace(0, 4, c->getDepartmentNumber(department));
+    studentId.replace(5, 2, c->getClassnameNumber(classname));
+
     const student s(name, QDate::fromString(birthdayStr, "yyyy-MM-dd"), studentId, address, department, classname,
                     gender);
     try {
         c->modifyStudent(students[row].getNumber(), s);
         students = c->getStudents();
+        displayStudents();
     } catch (const std::exception &e) {
         revertRow(row);
         QMessageBox::warning(this, "Error", e.what());
