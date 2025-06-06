@@ -15,6 +15,7 @@
 #include <QGridLayout>
 #include <QHeaderView>
 #include <QMessageBox>
+#include <QStatusBar>
 
 #include "addUserDialog.h"
 #include "modifyPasswordDialog.h"
@@ -29,6 +30,7 @@ public:
 
 private:
     QMenuBar *menu;
+    QStatusBar *statusBar;
     QMenu *menuFile;
     QMenu *menuEdit;
     QAction *actionExit;

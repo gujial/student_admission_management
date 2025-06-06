@@ -19,6 +19,7 @@
 #include <QSet>
 #include <QInputDialog>
 #include <regex>
+#include <QStatusBar>
 
 #include "controller.h"
 #include "userManageWindow.h"
@@ -32,6 +33,7 @@ public:
 
 private:
     QMenuBar *menu;
+    QStatusBar *statusBar;
     QMenu *menuFile;
     QMenu *menuEdit;
     QMenu *menuHelp;

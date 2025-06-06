@@ -14,6 +14,8 @@ mainWindow::mainWindow(QWidget *parent, controller *c) {
     // 初始化成员变量
     this->c = c;
     menu = new QMenuBar(this);
+    statusBar = new QStatusBar(this);
+    statusBar->addPermanentWidget(new QLabel("Select one line or more before delete student."));
     menuFile = new QMenu("File");
     menuEdit = new QMenu("Edit");
     menuHelp = new QMenu("Help");
@@ -51,6 +53,7 @@ mainWindow::mainWindow(QWidget *parent, controller *c) {
     layout = new QGridLayout(central);
     central->setLayout(layout);
     setCentralWidget(central);
+    setStatusBar(statusBar);
 
     // 设置菜单
     menuHelp->addAction(actionAbout);
@@ -122,7 +125,7 @@ mainWindow::mainWindow(QWidget *parent, controller *c) {
         }
 
         const auto userManageWd = new userManageWindow(this, c);
-        userManageWd->resize(400, 300);
+        userManageWd->adjustSize();
         userManageWd->show();
     });
 

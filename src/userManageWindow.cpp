@@ -10,6 +10,8 @@ userManageWindow::userManageWindow(QWidget *parent, controller *c) {
     this->c = c;
 
     menu = new QMenuBar(this);
+    statusBar = new QStatusBar(this);
+    statusBar->addPermanentWidget(new QLabel("Select one line or more before delete user. But only select one line before modify password."));
     menuFile = new QMenu("File");
     menuEdit = new QMenu("Edit");
     actionExit = new QAction("Exit");
@@ -30,6 +32,7 @@ userManageWindow::userManageWindow(QWidget *parent, controller *c) {
     layout = new QGridLayout(central);
     central->setLayout(layout);
     setCentralWidget(central);
+    setStatusBar(statusBar);
 
     menuEdit->addAction(actionAddUser);
     menuEdit->addAction(actionDeleteUser);
